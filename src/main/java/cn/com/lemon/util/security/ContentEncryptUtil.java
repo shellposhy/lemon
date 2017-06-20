@@ -1,4 +1,4 @@
-package cn.com.lemon.util;
+package cn.com.lemon.util.security;
 
 import java.security.SecureRandom;
 import javax.crypto.Cipher;
