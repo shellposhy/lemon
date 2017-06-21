@@ -111,6 +111,7 @@ public class HtmlUtil {
 			private Stack<HTML.Tag> tagStick = new Stack<HTML.Tag>();
 			private boolean dropTag = false;
 			private int htmlLength = html.length();
+
 			private void pushLastStrTag(int pos) {
 				if ((!this.dropTag) && (this.lastObjType > 0) && (pos > this.lastStartPos)) {
 					if (pos < this.htmlLength - 1) {
