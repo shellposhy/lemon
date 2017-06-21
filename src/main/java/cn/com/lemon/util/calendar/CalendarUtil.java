@@ -6,7 +6,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
-import cn.com.lemon.common.enums.EDateType;
+import cn.com.lemon.common.enums.date.EDateType;
 
 /**
  * The <code>CommonCalendarUtil</code> class is the base <code>Calendar</code>
