@@ -29,7 +29,7 @@ public class barcodeUtil {
 		return Code(value, path, null, BarcodeFormat.QR_CODE, 0, 0);
 	}
 
-	public static String QRCode(String value, String path, String name) {
+	public static String QRCode(String value, String path, String name) { 
 		return Code(value, path, name, BarcodeFormat.QR_CODE, 0, 0);
 	}
 

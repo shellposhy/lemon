@@ -1,4 +1,4 @@
-package cn.com.lemon.util.document;
+package cn.com.lemon.framework.model;
 
 public class Zip {
 	private long zipFileSize;
