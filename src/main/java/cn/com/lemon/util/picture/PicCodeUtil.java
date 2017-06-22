@@ -1,21 +1,12 @@
 package cn.com.lemon.util.picture;
 
-import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.nio.file.FileSystems;
 import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.Map;
-
-import org.krysalis.barcode4j.impl.code128.Code128Bean;
-import org.krysalis.barcode4j.output.bitmap.BitmapCanvasProvider;
-import org.krysalis.barcode4j.tools.UnitConv;
 
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.EncodeHintType;
@@ -35,21 +26,23 @@ import sun.misc.BASE64Encoder;
 public class PicCodeUtil {
 
 	public static String QRCode(String value, String path) {
-		return QRCode(value, path, null, 0, 0);
+		return Code(value, path, null, BarcodeFormat.QR_CODE, 0, 0);
 	}
 
 	public static String QRCode(String value, String path, String name) {
-		return QRCode(value, path, name, 0, 0);
+		return Code(value, path, name, BarcodeFormat.QR_CODE, 0, 0);
 	}
 
-	public static String QRCode(String code, String filePath, String name, int width, int height) {
-		assert code != null;
+	public static String Code(String value, String filePath, String name, BarcodeFormat format, int width, int height) {
+		assert value != null;
 		assert filePath != null;
 		name = name != null ? name : String.valueOf(System.currentTimeMillis());
 		Map<EncodeHintType, Object> hints = new HashMap<EncodeHintType, Object>();
 		hints.put(EncodeHintType.CHARACTER_SET, "UTF-8");
 		try {
-			BitMatrix matrix = new MultiFormatWriter().encode(code, BarcodeFormat.QR_CODE, width, height, hints);
+			width = width == 0 ? 150 : width;
+			height = height == 0 ? 150 : height;
+			BitMatrix matrix = new MultiFormatWriter().encode(value, format, width, height, hints);
 			Path path = FileSystems.getDefault().getPath(filePath, name + ".png");
 			MatrixToImageWriter.writeToPath(matrix, "png", path);
 			return filePath + (filePath.endsWith("/") ? "" : "/") + name + ".png";
@@ -57,39 +50,6 @@ public class PicCodeUtil {
 			e.printStackTrace();
 			return null;
 		} catch (WriterException e) {
-			e.printStackTrace();
-			return null;
-		}
-	}
-
-	public static String Barcode(String code, String path) {
-		return Barcode(code, path, null);
-	}
-
-	public static String Barcode(String code, String path, String name) {
-		assert code != null;
-		assert path != null;
-		File filePath = new File(path);
-		if (!filePath.exists())
-			filePath.mkdirs();
-		try {
-			int dpi = 100;
-			Code128Bean code128Bean = new Code128Bean();
-			code128Bean.setModuleWidth(UnitConv.in2mm(1.0f / dpi));
-			code128Bean.doQuietZone(false);
-			name = name != null ? name : String.valueOf(System.currentTimeMillis());
-			File outputFile = new File(path + (path.endsWith("/") ? "" : "/") + name + ".png");
-			OutputStream out = new FileOutputStream(outputFile);
-			BitmapCanvasProvider provider = new BitmapCanvasProvider(out, "image/x-png", dpi,
-					BufferedImage.TYPE_BYTE_BINARY, false, 0);
-			code128Bean.generateBarcode(provider, code);
-			provider.finish();
-			out.close();
-			return path + (path.endsWith("/") ? "" : "/") + name + ".png";
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-			return null;
-		} catch (IOException e) {
 			e.printStackTrace();
 			return null;
 		}
