@@ -1,4 +1,4 @@
-package cn.com.lemon.util.freemarker;
+package cn.com.lemon.util.marker;
 
 import freemarker.template.Configuration;
 import freemarker.template.Template;
