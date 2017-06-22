@@ -1,4 +1,4 @@
-package cn.com.lemon.util;
+package cn.com.lemon.util.picture;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
