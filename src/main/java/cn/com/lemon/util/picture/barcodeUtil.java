@@ -23,7 +23,7 @@ import sun.misc.BASE64Encoder;
  * @author shishb
  * @version 1.0
  */
-public class PicCodeUtil {
+public class barcodeUtil {
 
 	public static String QRCode(String value, String path) {
 		return Code(value, path, null, BarcodeFormat.QR_CODE, 0, 0);
