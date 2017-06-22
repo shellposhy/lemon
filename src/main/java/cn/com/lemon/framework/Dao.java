@@ -2,6 +2,8 @@ package cn.com.lemon.framework;
 
 import java.util.List;
 
+import cn.com.lemon.framework.model.BaseEntity;
+
 /**
  * The <code>Dao</code> interface is the basic data persistence api.
  * <p>
@@ -12,7 +14,7 @@ import java.util.List;
  * @author shellpo shih
  * @version 1.0
  */
-public abstract interface Dao<T> {
+public abstract interface Dao<T extends BaseEntity> {
 
 	/* =========search========== */
 	public abstract T find(int id);
