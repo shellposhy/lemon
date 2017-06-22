@@ -2,7 +2,17 @@ package cn.com.lemon.framework;
 
 import java.util.List;
 
-public abstract interface BaseDao<T> {
+/**
+ * The <code>Dao</code> interface is the basic data persistence api.
+ * <p>
+ * Support the third utilities(e.g.<code>Mybatis</code>) implement this
+ * interface
+ * 
+ * @see List
+ * @author shellpo shih
+ * @version 1.0
+ */
+public abstract interface Dao<T> {
 
 	/* =========search========== */
 	public abstract T find(int id);
