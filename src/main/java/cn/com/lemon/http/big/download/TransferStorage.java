@@ -1,4 +1,4 @@
-package cn.com.lemon.framework.transfer;
+package cn.com.lemon.http.big.download;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;

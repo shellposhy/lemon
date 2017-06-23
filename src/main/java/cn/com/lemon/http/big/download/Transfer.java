@@ -1,4 +1,4 @@
-package cn.com.lemon.framework.transfer;
+package cn.com.lemon.http.big.download;
 
 /**
  * The <code>Transfer</code> class is the basic bean to describe file info when
