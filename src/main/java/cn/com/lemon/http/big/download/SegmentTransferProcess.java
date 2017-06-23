@@ -27,7 +27,7 @@ public class SegmentTransferProcess extends Thread {
 		this.startPos = startPos;
 		this.endPos = endPos;
 		this.threadID = id;
-		storage = new TransferStorage(fileName, startPos);
+		this.storage = new TransferStorage(fileName, startPos);
 	}
 
 	public void run() {

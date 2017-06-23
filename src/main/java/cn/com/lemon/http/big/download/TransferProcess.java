@@ -25,7 +25,7 @@ public class TransferProcess extends Thread {
 
 	public TransferProcess(Transfer transfer) {
 		this.transfer = transfer;
-		tmpFile = new File(transfer.getFilePath() + File.separator + transfer.getFileName() + ".info");
+		tmpFile = new File(transfer.getFilePath() + File.separator + transfer.getFileName() + ".tmp");
 		if (tmpFile.exists()) {
 			first = false;
 			readPos();
@@ -53,7 +53,6 @@ public class TransferProcess extends Thread {
 					endPos[endPos.length - 1] = length;
 				}
 			}
-			// 启动子线程
 			segments = new SegmentTransferProcess[startPos.length];
 			for (int i = 0; i < startPos.length; i++) {
 				segments[i] = new SegmentTransferProcess(transfer.getUrl(),
@@ -77,6 +76,18 @@ public class TransferProcess extends Thread {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
+		} finally {
+			int count = 0;
+			for (int i = 0; i < startPos.length; i++) {
+				if (segments[i].status) {
+					count += 1;
+				}
+			}
+			if (count == segments.length) {
+				stopTransfer();
+				tmpFile.delete();
+			}
+			TransferLog.log("The Stop Thread Number[" + count + "]");
 		}
 	}
 
@@ -119,6 +130,7 @@ public class TransferProcess extends Thread {
 		try {
 			output = new DataOutputStream(new FileOutputStream(tmpFile));
 			output.writeInt(startPos.length);
+			TransferLog.log("\n");
 			for (int i = 0; i < startPos.length; i++) {
 				output.writeLong(segments[i].startPos);
 				output.writeLong(segments[i].endPos);
@@ -135,11 +147,9 @@ public class TransferProcess extends Thread {
 		try {
 			DataInputStream input = new DataInputStream(new FileInputStream(tmpFile));
 			int count = input.readInt();
-			TransferLog.log("==read pos=" + count);
 			startPos = new long[count];
 			endPos = new long[count];
 			for (int i = 0; i < startPos.length; i++) {
-				TransferLog.log("pos[" + i + "]=" + input.readLong());
 				startPos[i] = input.readLong();
 				endPos[i] = input.readLong();
 			}
