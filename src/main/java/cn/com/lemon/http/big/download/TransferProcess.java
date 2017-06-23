@@ -9,6 +9,9 @@ import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+import cn.com.lemon.http.big.Transfer;
+import cn.com.lemon.http.big.TransferLog;
+
 public class TransferProcess extends Thread {
 	Transfer transfer = null;
 	long[] startPos;
@@ -55,11 +58,13 @@ public class TransferProcess extends Thread {
 			for (int i = 0; i < startPos.length; i++) {
 				segments[i] = new SegmentTransferProcess(transfer.getUrl(),
 						transfer.getFilePath() + File.separator + transfer.getFileName(), startPos[i], endPos[i], i);
+				TransferLog.log("Thread[" + i + "] , StartPos[" + startPos[i] + "] EndPos[" + endPos[i] + "]");
 				segments[i].start();
 			}
 			boolean flag = false;
 			while (!stop) {
 				writePos();
+				TransferLog.sleep(500);
 				flag = true;
 				for (int i = 0; i < startPos.length; i++) {
 					if (!segments[i].status) {
@@ -130,9 +135,11 @@ public class TransferProcess extends Thread {
 		try {
 			DataInputStream input = new DataInputStream(new FileInputStream(tmpFile));
 			int count = input.readInt();
+			TransferLog.log("==read pos=" + count);
 			startPos = new long[count];
 			endPos = new long[count];
 			for (int i = 0; i < startPos.length; i++) {
+				TransferLog.log("pos[" + i + "]=" + input.readLong());
 				startPos[i] = input.readLong();
 				endPos[i] = input.readLong();
 			}
