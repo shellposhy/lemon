@@ -6,20 +6,24 @@ import java.net.URL;
 
 import cn.com.lemon.http.big.TransferStorage;
 
+/**
+ * Download large files process main class,provider threads download.
+ * 
+ * @see Thread
+ * @see TransferStorage
+ * @see URL
+ * @see HttpURLConnection
+ * @see InputStream
+ * @author shellpo shih
+ * @version 1.0
+ */
 public class SegmentTransferProcess extends Thread {
-	// File URL
 	String url;
-	// File Snippet Start Position
 	long startPos;
-	// File Snippet End Position
 	long endPos;
-	// Thread's ID
 	int threadID;
-	// Downing is over
 	boolean status = false;
-	// Stop identical
 	boolean stop = false;
-	// File Access interface
 	TransferStorage storage = null;
 
 	public SegmentTransferProcess(String url, String fileName, long startPos, long endPos, int id) {

@@ -9,10 +9,24 @@ import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+import org.apache.log4j.Logger;
+
 import cn.com.lemon.http.Monitoring;
 import cn.com.lemon.http.big.Transfer;
 
+/**
+ * Download large files process main class,provider download.
+ * 
+ * @see Thread
+ * @see SegmentTransferProcess
+ * @see DataOutputStream
+ * @see DataInputStream
+ * @see File
+ * @author shellpo shih
+ * @version 1.0
+ */
 public class TransferProcess extends Thread {
+	private static Logger LOG = Logger.getLogger(TransferProcess.class.getName());
 	Transfer transfer = null;
 	long[] startPos;
 	long[] endPos;
@@ -40,8 +54,10 @@ public class TransferProcess extends Thread {
 			if (first) {
 				length = getFileSize();
 				if (length == -1) {
+					LOG.debug("File Length is not known!");
 					System.err.println("File Length is not known!");
 				} else if (length == -2) {
+					LOG.debug("File is not access!");
 					System.err.println("File is not access!");
 				} else {
 					for (int i = 0; i < startPos.length; i++) {

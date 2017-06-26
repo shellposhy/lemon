@@ -4,6 +4,16 @@ import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.io.Serializable;
 
+/**
+ * Instances of this class support both reading and writing to a random access
+ * file.<em>for large files</em>,this class provide the safety writing the
+ * content what by <code>Bytes</code>
+ * 
+ * @see RandomAccessFile
+ * @see Serializable
+ * @author shellpo shih
+ * @version 1.0
+ */
 public class TransferStorage implements Serializable {
 	private static final long serialVersionUID = 1L;
 	RandomAccessFile storage;

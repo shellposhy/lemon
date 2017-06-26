@@ -9,15 +9,10 @@ package cn.com.lemon.http.big;
  * 
  */
 public class Transfer {
-	// Site's URL
 	private String url;
-	// Saved File's Path
 	private String filePath;
-	// Saved File's Name
 	private String fileName;
-	// Count of Splited Downloading File
 	private int segment;
-	// the upload or download file percentage
 	private int percentage;
 
 	// default value of segment is 5
