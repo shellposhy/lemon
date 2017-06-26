@@ -18,26 +18,26 @@ import cn.com.lemon.http.big.Transfer;
  * Download large files process main class,provider download.
  * 
  * @see Thread
- * @see SegmentTransferProcess
+ * @see DownloadSegmentProcess
  * @see DataOutputStream
  * @see DataInputStream
  * @see File
  * @author shellpo shih
  * @version 1.0
  */
-public class TransferProcess extends Thread {
-	private static Logger LOG = Logger.getLogger(TransferProcess.class.getName());
+public class DownloadProcess extends Thread {
+	private static Logger LOG = Logger.getLogger(DownloadProcess.class.getName());
 	Transfer transfer = null;
 	long[] startPos;
 	long[] endPos;
-	SegmentTransferProcess[] segments;
+	DownloadSegmentProcess[] segments;
 	long length;
 	boolean first = true;
 	boolean stop = false;
 	File tmpFile;
 	DataOutputStream output;
 
-	public TransferProcess(Transfer transfer) {
+	public DownloadProcess(Transfer transfer) {
 		this.transfer = transfer;
 		tmpFile = new File(transfer.getFilePath() + File.separator + transfer.getFileName() + ".tmp");
 		if (tmpFile.exists()) {
@@ -69,9 +69,9 @@ public class TransferProcess extends Thread {
 					endPos[endPos.length - 1] = length;
 				}
 			}
-			segments = new SegmentTransferProcess[startPos.length];
+			segments = new DownloadSegmentProcess[startPos.length];
 			for (int i = 0; i < startPos.length; i++) {
-				segments[i] = new SegmentTransferProcess(transfer.getUrl(),
+				segments[i] = new DownloadSegmentProcess(transfer.getUrl(),
 						transfer.getFilePath() + File.separator + transfer.getFileName(), startPos[i], endPos[i], i);
 				Monitoring.log("Thread[" + i + "] , StartPos[" + startPos[i] + "] EndPos[" + endPos[i] + "]");
 				segments[i].start();
