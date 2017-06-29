@@ -11,7 +11,7 @@ import java.net.URL;
 
 import org.apache.log4j.Logger;
 
-import cn.com.lemon.http.Monitoring;
+//import cn.com.lemon.http.Monitoring;
 import cn.com.lemon.http.big.Transfer;
 
 /**
@@ -73,13 +73,14 @@ public class DownloadProcess extends Thread {
 			for (int i = 0; i < startPos.length; i++) {
 				segments[i] = new DownloadSegmentProcess(transfer.getUrl(),
 						transfer.getFilePath() + File.separator + transfer.getFileName(), startPos[i], endPos[i], i);
-				Monitoring.log("Thread[" + i + "] , StartPos[" + startPos[i] + "] EndPos[" + endPos[i] + "]");
+				// Monitoring.log("Thread[" + i + "] , StartPos[" + startPos[i]
+				// + "] EndPos[" + endPos[i] + "]");
 				segments[i].start();
 			}
 			boolean flag = false;
 			while (!stop) {
 				writePos();
-				Monitoring.sleep(500);
+				// Monitoring.sleep(500);
 				flag = true;
 				for (int i = 0; i < startPos.length; i++) {
 					if (!segments[i].status) {
@@ -103,7 +104,7 @@ public class DownloadProcess extends Thread {
 				stopTransfer();
 				tmpFile.delete();
 			}
-			Monitoring.log("The Stop Thread Number[" + count + "]");
+			// Monitoring.log("The Stop Thread Number[" + count + "]");
 		}
 	}
 
@@ -146,7 +147,7 @@ public class DownloadProcess extends Thread {
 		try {
 			output = new DataOutputStream(new FileOutputStream(tmpFile));
 			output.writeInt(startPos.length);
-			Monitoring.log("\n");
+			// Monitoring.log("\n");
 			for (int i = 0; i < startPos.length; i++) {
 				output.writeLong(segments[i].startPos);
 				output.writeLong(segments[i].endPos);
