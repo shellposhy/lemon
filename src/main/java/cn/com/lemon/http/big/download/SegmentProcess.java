@@ -17,7 +17,7 @@ import cn.com.lemon.http.big.TransferStorage;
  * @author shellpo shih
  * @version 1.0
  */
-public class DownloadSegmentProcess extends Thread {
+public class SegmentProcess extends Thread {
 	String url;
 	long startPos;
 	long endPos;
@@ -26,7 +26,7 @@ public class DownloadSegmentProcess extends Thread {
 	boolean stop = false;
 	TransferStorage storage = null;
 
-	public DownloadSegmentProcess(String url, String fileName, long startPos, long endPos, int id) {
+	public SegmentProcess(String url, String fileName, long startPos, long endPos, int id) {
 		this.url = url;
 		this.startPos = startPos;
 		this.endPos = endPos;

@@ -18,7 +18,7 @@ import cn.com.lemon.http.big.Transfer;
  * Download large files process main class,provider download.
  * 
  * @see Thread
- * @see DownloadSegmentProcess
+ * @see SegmentProcess
  * @see DataOutputStream
  * @see DataInputStream
  * @see File
@@ -30,7 +30,7 @@ public class DownloadProcess extends Thread {
 	Transfer transfer = null;
 	long[] startPos;
 	long[] endPos;
-	DownloadSegmentProcess[] segments;
+	SegmentProcess[] segments;
 	long length;
 	boolean first = true;
 	boolean stop = false;
@@ -69,9 +69,9 @@ public class DownloadProcess extends Thread {
 					endPos[endPos.length - 1] = length;
 				}
 			}
-			segments = new DownloadSegmentProcess[startPos.length];
+			segments = new SegmentProcess[startPos.length];
 			for (int i = 0; i < startPos.length; i++) {
-				segments[i] = new DownloadSegmentProcess(transfer.getUrl(),
+				segments[i] = new SegmentProcess(transfer.getUrl(),
 						transfer.getFilePath() + File.separator + transfer.getFileName(), startPos[i], endPos[i], i);
 				// Monitoring.log("Thread[" + i + "] , StartPos[" + startPos[i]
 				// + "] EndPos[" + endPos[i] + "]");
