@@ -1,168 +1,177 @@
 package cn.com.lemon.util;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
-import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
-import java.sql.Blob;
-import java.sql.SQLException;
-import java.util.List;
 
-import cn.com.lemon.http.HtmlUtil;
-
+/**
+ * The <code>StringUtil</code>class is basic string utilities.
+ * 
+ * @see UnsupportedEncodingException
+ * @see MessageDigest
+ * @author shellpo shih
+ * @version 1.0
+ */
 public class StringUtil {
-	public static final String EMPTY = "";
 
-	public static boolean isEmpty(String str) {
-		return (str == null) || (str.isEmpty());
+	/**
+	 * Returns the given string if it is non-null; the empty string otherwise.
+	 *
+	 * @param string
+	 *            the string to test and possibly return
+	 * @return {@code string} itself if it is non-null; {@code ""} if it is null
+	 */
+	public static String nullToEmpty(String string) {
+		return (string == null) ? "" : string;
 	}
 
-	public static boolean isEmptyAfterTrim(String str) {
-		return (isEmpty(str)) || (str.trim().length() == 0);
+	/**
+	 * Returns the given string if it is nonempty; {@code null} otherwise.
+	 *
+	 * @param string
+	 *            the string to test and possibly return
+	 * @return {@code string} itself if it is nonempty; {@code null} if it is
+	 *         empty or null
+	 */
+	public static String emptyToNull(String string) {
+		return isNullOrEmpty(string) ? null : string;
 	}
 
-	public static String substringBefore(String str, String separator) {
-		if ((isEmptyAfterTrim(str)) || (separator == null)) {
-			return str;
-		}
-		if (separator.length() == 0) {
-			return "";
-		}
-		int pos = indexOfIgnoreCase(str, separator);
-		if (pos == -1) {
-			return str;
-		}
-		return str.substring(0, pos);
+	/**
+	 * Returns {@code true} if the given string is null or is the empty string.
+	 * 
+	 * @param string
+	 * @return {@code true} if the string is null or is the empty string
+	 */
+	public static boolean isNullOrEmpty(String string) {
+		return string == null || string.length() == 0;
 	}
 
-	public static String substringAfter(String str, String separator) {
-		if ((str == null) || (str.trim().equals(""))) {
-			return str;
-		}
-		if (separator == null) {
-			return "";
-		}
-		int pos = indexOfIgnoreCase(str, separator);
-		if (pos == -1) {
-			return "";
-		}
-		return str.substring(pos + separator.length());
-	}
-
-	public static int indexOfIgnoreCase(String str, String searchStr) {
-		return indexOfIgnoreCase(str, searchStr, 0);
-	}
-
-	public static int indexOfIgnoreCase(String str, String searchStr, int startPos) {
-		int spos = startPos;
-		if ((str == null) || (searchStr == null)) {
-			return -1;
-		}
-		if (spos < 0) {
-			spos = 0;
-		}
-		int endLimit = str.length() - searchStr.length() + 1;
-		if (spos > endLimit) {
-			return -1;
-		}
-		if (searchStr.length() == 0) {
-			return spos;
-		}
-		for (int i = spos; i < endLimit; i++) {
-			if (str.regionMatches(true, i, searchStr, 0, searchStr.length())) {
-				return i;
-			}
-		}
-		return -1;
-	}
-
-	public static String combineToString(String[] strArray, String separator) {
-		StringBuilder result = new StringBuilder();
-		String[] arrayOfString = strArray;
-		int j = strArray.length;
-		for (int i = 0; i < j; i++) {
-			String str = arrayOfString[i];
-			result.append(str).append(separator);
-		}
-		if (result.length() > 0) {
-			result.setLength(result.length() - 1);
-		}
-		return result.toString();
-	}
-
-	public static String combineToString(List<String> strList, String separator) {
-		return combineToString((String[]) strList.toArray(new String[strList.size()]), separator);
-	}
-
-	public static String toStringFromThrowableWithStackTrace(Throwable throwable) {
-		StringWriter sw = new StringWriter();
-		PrintWriter pw = new PrintWriter(sw);
-		throwable.printStackTrace(pw);
-		pw.flush();
-		sw.flush();
-		return sw.toString();
-	}
-
-	public static String subStringByByte(String resourseStr, int subLength) {
-		return subStringByByte(resourseStr, subLength, null);
-	}
-
-	public static String subStringByByte(String resourseStr, int subLength, String suffix) {
-		if ((resourseStr == null) || (resourseStr.equals(""))) {
-			return resourseStr;
-		}
-		if (resourseStr.getBytes().length <= subLength) {
-			return resourseStr;
-		}
-		int tempSubLength = subLength;
-		if (suffix != null) {
-			tempSubLength -= suffix.length();
-		}
-		int tempLength = resourseStr.length() > subLength ? subLength : resourseStr.length();
-		String subStr = resourseStr.substring(0, tempLength);
+	/**
+	 * Returns {@code true} if the given string is contain Chinese string.
+	 * 
+	 * @param string
+	 * @return ({@code true} if the string is contain Chinese string
+	 */
+	public static boolean isContainChinese(String string) {
+		assert string != null;
+		if (isNullOrEmpty(string))
+			return false;
 		try {
-			int subStrByetsL = subStr.getBytes("GBK").length;
-			while (subStrByetsL > tempSubLength) {
-				subLength--;
-				int subSLengthTemp = subLength;
-				subStr = subStr.substring(0, subSLengthTemp > subStr.length() ? subStr.length() : subSLengthTemp);
-				subStrByetsL = subStr.getBytes("GBK").length;
-			}
-			if ((suffix != null) && (resourseStr.length() > subStr.length())) {
-			}
-			return subStr + suffix;
+			return string.getBytes("UTF-8").length - string.length() > 0 ? true : false;
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
-		} catch (StringIndexOutOfBoundsException se) {
-			se.printStackTrace();
+			return false;
 		}
-		return null;
 	}
 
-	public static String toString(Blob blob) throws UnsupportedEncodingException, SQLException, IOException {
-		BufferedReader br = new BufferedReader(new InputStreamReader(blob.getBinaryStream(), "utf-8"));
-		String s = null;
-		StringBuilder sb = new StringBuilder();
-		while ((s = br.readLine()) != null) {
-			sb.append(s);
+	/**
+	 * Append the {@code target} to {@code source} and Return.
+	 * 
+	 * @param source
+	 * @param target
+	 * @return ({@code String} the combinatorial string
+	 */
+	public static String appendString(String source, String target) {
+		return new StringBuilder().append(source).append(target).toString();
+	}
+
+	/**
+	 * Returns {@code int} if the given string is contain Chinese string
+	 * 
+	 * @param string
+	 * @return ({@code int} if the string is contain Chinese string
+	 */
+	public static int countContainChinese(String string) {
+		assert string != null;
+		if (isNullOrEmpty(string))
+			return 0;
+		try {
+			if (isContainChinese(string)) {
+				int byteInt = string.getBytes("UTF-8").length;
+				int stringInt = string.length();
+				return (byteInt - stringInt) / 2;
+			} else {
+				return 0;
+			}
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+			return 0;
 		}
-		return sb.toString();
 	}
 
-	public static String firstLetterToUpperCase(String inputStr) {
-		return String.valueOf(inputStr.charAt(0)).toUpperCase() + inputStr.substring(1);
+	/**
+	 * Returns {@code String} the sub String by the given string
+	 * <p>
+	 * special attention the Chinese string,different charsetName has different
+	 * length
+	 * 
+	 * @param string
+	 * @param length
+	 * @return ({@code String} the sub string
+	 */
+	public static String subString(String string, int length) {
+		return subString(string, length, null, "GBK");
 	}
 
-	public static String encodeToMD5(String message) {
+	/**
+	 * Returns {@code String} the sub String by the given string
+	 * <p>
+	 * special attention the Chinese string,different charsetName has different
+	 * length
+	 * 
+	 * @param string
+	 * @param length
+	 * @param suffix
+	 * @param charsetName
+	 * @return ({@code String} the sub string
+	 */
+	public static String subString(String string, int length, String suffix, String charsetName) {
+		assert string != null;
+		if (isNullOrEmpty(string)) {
+			return null;
+		}
+		suffix = isNullOrEmpty(suffix) ? "" : suffix;
+		int chineseNum = countContainChinese(string);
+		int size = string.length();
+		if (chineseNum > 0) {
+			try {
+				int count = string.getBytes(charsetName).length;
+				if (count <= length) {
+					return string;
+				} else {
+					length = length - suffix.getBytes(charsetName).length;
+					int tmp = length;
+					if (length > 0) {
+						String result = string.substring(0, length);
+						while (result.getBytes(charsetName).length > tmp) {
+							length--;
+							result = string.substring(0, length);
+						}
+						return result + suffix;
+					} else {
+						return suffix;
+					}
+				}
+			} catch (UnsupportedEncodingException e) {
+				e.printStackTrace();
+				return null;
+			}
+		} else {
+			return size >= length ? string.substring(0, length) + suffix : string;
+		}
+	}
+
+	/**
+	 * Encrypt the given string by Md5
+	 * 
+	 * @param string
+	 * @return {@code String}
+	 */
+	public static String encryptMD5String(String string) {
 		try {
 			MessageDigest md = MessageDigest.getInstance("MD5");
-			md.update(message.getBytes());
-
+			md.update(string.getBytes());
 			byte[] s = md.digest();
-
 			String result = "";
 			for (int i = 0; i < s.length; i++) {
 				result = result + Integer.toHexString(0xFF & s[i] | 0xFFFFFF00).substring(6);
@@ -174,44 +183,4 @@ public class StringUtil {
 		return null;
 	}
 
-	public static String leftByteStr(String str, int n) {
-		if (str == null) {
-			return null;
-		}
-		int m = 0;
-		for (int i = 0; i < str.length(); i++) {
-			m += (String.valueOf(str.charAt(i)).getBytes().length >= 2 ? 2 : 1);
-			if (m >= n) {
-				return str.substring(0, i + 1);
-			}
-		}
-		return str;
-	}
-
-	public static String leftByteHtmlStr(String str, int n) throws IOException {
-		return HtmlUtil.subByteString(str, 0, n);
-	}
-
-	public static int byteLength(String str) {
-		if (str == null) {
-			return 0;
-		}
-		int m = 0;
-		for (int i = 0; i < str.length(); i++) {
-			m += (String.valueOf(str.charAt(i)).getBytes().length >= 2 ? 2 : 1);
-		}
-		return m;
-	}
-
-	public static int byteHtmlLength(String str) throws IOException {
-		if (str == null) {
-			return 0;
-		}
-		str = HtmlUtil.getText(str);
-		int m = 0;
-		for (int i = 0; i < str.length(); i++) {
-			m += (String.valueOf(str.charAt(i)).getBytes().length >= 2 ? 2 : 1);
-		}
-		return m;
-	}
 }

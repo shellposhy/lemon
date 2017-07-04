@@ -8,7 +8,7 @@ import java.util.regex.Pattern;
  * 
  * @see Matcher
  * @see Pattern
- * @author shishb
+ * @author shellpo shih
  * @version 1.0
  */
 public class RegularUtil {

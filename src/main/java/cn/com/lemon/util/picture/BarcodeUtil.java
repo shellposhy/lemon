@@ -23,16 +23,63 @@ import sun.misc.BASE64Encoder;
  * @author shishb
  * @version 1.0
  */
-public class barcodeUtil {
+public class BarcodeUtil {
 
+	/**
+	 * Create the QRCode and Return the picture path
+	 * 
+	 * @param value
+	 * @param path
+	 * @return {@code String} the QRCode picture path
+	 */
 	public static String QRCode(String value, String path) {
 		return Code(value, path, null, BarcodeFormat.QR_CODE, 0, 0);
 	}
 
-	public static String QRCode(String value, String path, String name) { 
+	/**
+	 * Create the QRCode and Return the picture path
+	 * 
+	 * @param value
+	 * @param path
+	 * @param name
+	 * @return {@code String} the QRCode picture path
+	 */
+	public static String QRCode(String value, String path, String name) {
 		return Code(value, path, name, BarcodeFormat.QR_CODE, 0, 0);
 	}
 
+	/**
+	 * Create the common code picture and Return the picture path
+	 * <p>
+	 * the code picture contains:
+	 * <ul>
+	 * <li>AZTEC</li>
+	 * <li>CODABAR</li>
+	 * <li>CODE_39</li>
+	 * <li>CODE_93</li>
+	 * <li>CODE_128</li>
+	 * <li>DATA_MATRIX</li>
+	 * <li>EAN_8</li>
+	 * <li>EAN_13</li>
+	 * <li>ITF</li>
+	 * <li>MAXICODE</li>
+	 * <li>PDF_417</li>
+	 * <li>QR_CODE</li>
+	 * <li>RSS_14</li>
+	 * <li>RSS_EXPANDED</li>
+	 * <li>UPC_A</li>
+	 * <li>UPC_E</li>
+	 * <li>UPC_EAN_EXTENSION</li>
+	 * </ul>
+	 * 
+	 * @param value
+	 * @param filePath
+	 * @param name
+	 * @param format
+	 * @param width
+	 * @param height
+	 * @return {@code String} the picture code path
+	 */
 	public static String Code(String value, String filePath, String name, BarcodeFormat format, int width, int height) {
 		assert value != null;
 		assert filePath != null;
@@ -55,6 +102,12 @@ public class barcodeUtil {
 		}
 	}
 
+	/**
+	 * Create the picture base64 string
+	 * 
+	 * @param fullFileName
+	 * @return {@code String} the base64 picture string
+	 */
 	public static String Base64ImageContent(String fullFileName) {
 		try {
 			InputStream in = new FileInputStream(fullFileName);

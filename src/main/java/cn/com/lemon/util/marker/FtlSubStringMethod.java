@@ -11,8 +11,8 @@ public class FtlSubStringMethod implements TemplateMethodModel {
 		String str = arguments.get(0).toString();
 		int len = Integer.valueOf(arguments.get(1).toString()).intValue();
 		if (arguments.size() > 2) {
-			return StringUtil.subStringByByte(str, len, arguments.get(2).toString());
+			return StringUtil.subString(str, len, arguments.get(2).toString(), "GBK");
 		}
-		return StringUtil.subStringByByte(str, len);
+		return StringUtil.subString(str, len);
 	}
 }
