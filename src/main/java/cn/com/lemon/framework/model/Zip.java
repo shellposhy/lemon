@@ -1,5 +1,11 @@
 package cn.com.lemon.framework.model;
 
+/**
+ * The zip bean properties
+ * 
+ * @author shellpo shih
+ * @version 1.0
+ */
 public class Zip {
 	private long zipFileSize;
 	private long contentSize;

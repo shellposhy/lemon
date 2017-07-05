@@ -1,4 +1,4 @@
-package cn.com.lemon.util.document;
+package cn.com.lemon.util.file;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;

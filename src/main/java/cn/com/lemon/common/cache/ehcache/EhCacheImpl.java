@@ -1,13 +1,10 @@
 package cn.com.lemon.common.cache.ehcache;
 
-import java.util.logging.Logger;
-
 import cn.com.lemon.common.cache.ICache;
 import net.sf.ehcache.Cache;
 import net.sf.ehcache.Element;
 
 public class EhCacheImpl implements ICache<Cache> {
-	private Logger logger = Logger.getLogger("DefaultCache");
 	private Cache cache;
 
 	public EhCacheImpl(Cache cache) {
@@ -31,7 +28,6 @@ public class EhCacheImpl implements ICache<Cache> {
 	public Object get(Object key) {
 		Element e = this.cache.get(key);
 		if (e != null) {
-			this.logger.finest("====>" + this.cache.getName() + ":get object by key:[" + key + "] ok.");
 			return e.getObjectValue();
 		}
 		return null;

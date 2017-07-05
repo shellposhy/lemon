@@ -9,7 +9,7 @@ import java.util.GregorianCalendar;
 import cn.com.lemon.common.enums.date.EDateType;
 
 /**
- * The <code>CommonCalendarUtil</code> class is the base <code>Calendar</code>
+ * The <code>CalendarUtil</code> class is the base <code>Calendar</code>
  * utilities
  * 
  * @see Date

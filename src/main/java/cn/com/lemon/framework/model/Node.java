@@ -1,7 +1,7 @@
 package cn.com.lemon.framework.model;
 
 /**
- * 节点对象
+ * The tree data base bean
  * 
  * @author shellpo shih
  * @version 1.0

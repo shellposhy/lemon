@@ -1,4 +1,4 @@
-package cn.com.lemon.util.marker;
+package cn.com.lemon.util.stabilize;
 
 import freemarker.template.Configuration;
 import freemarker.template.Template;
@@ -13,16 +13,41 @@ import java.util.Locale;
 import java.util.Map;
 import org.apache.log4j.Logger;
 
-public class FreeMarkerUtil {
-	private static final Logger logger = Logger.getLogger(FreeMarkerUtil.class);
+/**
+ * Java web project use the class to create static pages by
+ * <code>FreeMarker</code>,before using this API's.You need the parameter as
+ * follow.
+ * <ul>
+ * <li>Template Directory</li>
+ * <li>Template Name</li>
+ * <li>Wrap Data</li>
+ * <li>Output Name</li>
+ * </ul>
+ * 
+ * @see Configuration
+ * @see Template
+ * @see Logger
+ * @author shellpo shih
+ * @version 1.0
+ */
+public class Staticizing {
+	private static final Logger logger = Logger.getLogger(Staticizing.class);
 
-	public static boolean publish(String templateDirectoryPath, String templateFileName, Map<String, Object> data,
+	/**
+	 * Create the output files
+	 * 
+	 * @param templateDirectory
+	 * @param templateFileName
+	 * @param data
+	 * @param htmlFileName
+	 * @return {@code true} if the file is created
+	 */
+	public static boolean publish(String templateDirectory, String templateFileName, Map<String, Object> data,
 			String htmlFileName) {
-		logger.debug("=====freemarker publish=====");
 		try {
 			Configuration cfg = new Configuration();
 			cfg.setEncoding(Locale.getDefault(), "UTF-8");
-			cfg.setDirectoryForTemplateLoading(new File(templateDirectoryPath));
+			cfg.setDirectoryForTemplateLoading(new File(templateDirectory));
 			Template template = cfg.getTemplate(templateFileName, "UTF-8");
 			template.setEncoding("UTF-8");
 			File htmlFile = new File(htmlFileName);
@@ -39,4 +64,8 @@ public class FreeMarkerUtil {
 		}
 		return true;
 	}
+
+	public Staticizing() {
+	}
+
 }
