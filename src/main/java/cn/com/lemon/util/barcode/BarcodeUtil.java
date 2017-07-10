@@ -1,4 +1,4 @@
-package cn.com.lemon.util.picture;
+package cn.com.lemon.util.barcode;
 
 import java.io.FileInputStream;
 import java.io.IOException;
