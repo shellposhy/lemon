@@ -14,34 +14,26 @@ import cn.com.lemon.framework.model.BaseEntity;
  * @author shellpo shih
  * @version 1.0
  */
-public abstract interface Dao<T extends BaseEntity> {
+interface Dao<T extends BaseEntity> {
 
 	/* =========search========== */
-	public abstract T find(int id);
+	T get(int id);
 
-	public abstract List<T> find(String... values);
+	List<T> list(String... values);
 
-	public abstract List<T> find(int start, int end, String... values);
+	List<T> listAll();
 
-	public abstract List<T> findAll();
+	List<T> listPage(int start, int size, String... values);
+
+	/* =========count=========== */
+	int count(String... values);
 
 	/* =========insert========== */
-	public abstract int insert(T t);
-
-	public abstract void inset(T t);
-
-	public abstract void batchInsert(List<T> t);
+	int save(T t);
 
 	/* =========delete========== */
-	public abstract boolean delete(int id);
-
-	public abstract boolean delete(T t);
-
-	public abstract boolean batchDelete(List<T> t);
+	boolean delete(int id);
 
 	/* =========update========== */
-	public abstract boolean update(T t);
-
-	public abstract boolean batchUpdate(List<T> t);
-
+	boolean update(T t);
 }
