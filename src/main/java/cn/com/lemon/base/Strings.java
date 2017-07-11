@@ -1,4 +1,4 @@
-package cn.com.lemon.util;
+package cn.com.lemon.base;
 
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
@@ -11,7 +11,7 @@ import java.security.MessageDigest;
  * @author shellpo shih
  * @version 1.0
  */
-public class StringUtil {
+public class Strings {
 
 	/**
 	 * Returns the given string if it is non-null; the empty string otherwise.
@@ -167,7 +167,7 @@ public class StringUtil {
 	 * @param string
 	 * @return {@code String}
 	 */
-	public static String encryptMD5String(String string) {
+	public static String MD5(String string) {
 		try {
 			MessageDigest md = MessageDigest.getInstance("MD5");
 			md.update(string.getBytes());

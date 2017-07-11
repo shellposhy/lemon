@@ -4,7 +4,7 @@ import freemarker.template.TemplateMethodModel;
 import freemarker.template.TemplateModelException;
 import java.util.List;
 
-import cn.com.lemon.util.StringUtil;
+import cn.com.lemon.base.Strings;
 
 /**
  * When use {@code Staticizing} create output files,sometimes we need to limit
@@ -18,7 +18,7 @@ import cn.com.lemon.util.StringUtil;
  * @see TemplateMethodModel
  * @see TemplateModelException
  * @see List
- * @see StringUtil
+ * @see Strings
  * @author shellpo shih
  * @version 1.0
  */
@@ -28,8 +28,8 @@ public class PartitionMethod implements TemplateMethodModel {
 		int limit = Integer.valueOf(condition.get(1).toString()).intValue();
 		if (condition.size() > 2) {
 			String suffix = condition.get(2).toString();
-			return StringUtil.subString(content, limit, suffix, "GBK");
+			return Strings.subString(content, limit, suffix, "GBK");
 		}
-		return StringUtil.subString(content, limit);
+		return Strings.subString(content, limit);
 	}
 }
