@@ -65,7 +65,6 @@ public final class Excels {
 
 	public static List<String[]> read(File file, boolean isFirstRow) {
 		checkArgument(file.exists() && file.isFile());
-
 		String fileName = file.getName();
 		try {
 			Workbook workbook = workbook(new FileInputStream(file), suffix(fileName, false));
@@ -97,19 +96,19 @@ public final class Excels {
 				Sheet sheet = workbook.getSheetAt(rows);
 				if (null == sheet)
 					continue;
-				int firstRowNum = sheet.getFirstRowNum();
-				int lastRowNum = sheet.getLastRowNum();
+				int firstRow = sheet.getFirstRowNum();
+				int lastRow = sheet.getLastRowNum();
 				if (isFirstRow)
-					firstRowNum += 1;
-				for (int num = firstRowNum; num <= lastRowNum; num++) {
+					firstRow += 1;
+				for (int num = firstRow; num <= lastRow; num++) {
 					Row row = sheet.getRow(num);
 					if (row == null) {
 						continue;
 					}
-					int firstCellNum = row.getFirstCellNum();
-					int lastCellNum = row.getPhysicalNumberOfCells();
+					int start = row.getFirstCellNum();
+					int end = row.getPhysicalNumberOfCells();
 					String[] cells = new String[row.getPhysicalNumberOfCells()];
-					for (int cellNum = firstCellNum; cellNum < lastCellNum; cellNum++) {
+					for (int cellNum = start; cellNum < end; cellNum++) {
 						Cell cell = row.getCell(cellNum);
 						cells[cellNum] = value(cell);
 					}
