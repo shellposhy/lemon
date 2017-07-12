@@ -14,7 +14,9 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.web.multipart.MultipartFile;
+
 import static cn.com.lemon.base.Preassert.checkArgument;
+import static cn.com.lemon.base.Strings.suffix;
 
 /**
  * Static utility methods pertaining to {@code Excel} primitives.
@@ -42,7 +44,7 @@ public final class Excels {
 	 * Returns the values from provided excel file to {@code List}.
 	 * 
 	 * @param file
-	 *            the {@MultipartFile} excel file
+	 *            the {@MultipartFile} or {@code File} excel file
 	 * @param isFirstRow
 	 *            if the value {@code true} Usually, excel file first row is
 	 *            info,we don't need.
@@ -51,60 +53,82 @@ public final class Excels {
 	 */
 	public static List<String[]> read(MultipartFile file, boolean isFirstRow) {
 		checkArgument(!file.isEmpty());
-		List<String[]> result = new ArrayList<String[]>();
 		String fileName = file.getOriginalFilename();
 		try {
-			Workbook workbook = workbook(file.getInputStream(), fileName.substring(fileName.lastIndexOf(".") + 1));
-			data(result, workbook, isFirstRow);
+			Workbook workbook = workbook(file.getInputStream(), suffix(fileName, false));
+			return data(workbook, isFirstRow);
 		} catch (IOException e) {
 			e.printStackTrace();
 			return null;
 		}
-		return null;
 	}
 
 	public static List<String[]> read(File file, boolean isFirstRow) {
 		checkArgument(file.exists() && file.isFile());
-		List<String[]> result = new ArrayList<String[]>();
+
 		String fileName = file.getName();
 		try {
-			Workbook workbook = workbook(new FileInputStream(file), fileName.substring(fileName.lastIndexOf(".") + 1));
-			data(result, workbook, isFirstRow);
+			Workbook workbook = workbook(new FileInputStream(file), suffix(fileName, false));
+			return data(workbook, isFirstRow);
 		} catch (IOException e) {
 			e.printStackTrace();
 			return null;
 		}
-		return null;
 	}
 
 	// The private utilities
-	private static void data(List<String[]> result, Workbook workbook, boolean isFirstRow) {
+	/**
+	 * Read the excel data and wrap the {@code List} date
+	 * 
+	 * @param result
+	 *            the return {@code List} value
+	 * @param workbook
+	 *            the excel {@code Workbook} data
+	 * @param isFirstRow
+	 *            whether show the excel first data
+	 * @return {@code List}
+	 */
+	private static List<String[]> data(Workbook workbook, boolean isFirstRow) {
 		checkArgument(null != workbook);
-		for (int rows = 0; rows < workbook.getNumberOfSheets(); rows++) {
-			Sheet sheet = workbook.getSheetAt(rows);
-			if (null == sheet)
-				continue;
-			int firstRowNum = sheet.getFirstRowNum();
-			int lastRowNum = sheet.getLastRowNum();
-			if (isFirstRow)
-				firstRowNum += 1;
-			for (int num = firstRowNum; num <= lastRowNum; num++) {
-				Row row = sheet.getRow(num);
-				if (row == null) {
+		List<String[]> result = null;
+		if (workbook.getNumberOfSheets() > 0) {
+			result = new ArrayList<String[]>();
+			for (int rows = 0; rows < workbook.getNumberOfSheets(); rows++) {
+				Sheet sheet = workbook.getSheetAt(rows);
+				if (null == sheet)
 					continue;
+				int firstRowNum = sheet.getFirstRowNum();
+				int lastRowNum = sheet.getLastRowNum();
+				if (isFirstRow)
+					firstRowNum += 1;
+				for (int num = firstRowNum; num <= lastRowNum; num++) {
+					Row row = sheet.getRow(num);
+					if (row == null) {
+						continue;
+					}
+					int firstCellNum = row.getFirstCellNum();
+					int lastCellNum = row.getPhysicalNumberOfCells();
+					String[] cells = new String[row.getPhysicalNumberOfCells()];
+					for (int cellNum = firstCellNum; cellNum < lastCellNum; cellNum++) {
+						Cell cell = row.getCell(cellNum);
+						cells[cellNum] = value(cell);
+					}
+					result.add(cells);
 				}
-				int firstCellNum = row.getFirstCellNum();
-				int lastCellNum = row.getPhysicalNumberOfCells();
-				String[] cells = new String[row.getPhysicalNumberOfCells()];
-				for (int cellNum = firstCellNum; cellNum < lastCellNum; cellNum++) {
-					Cell cell = row.getCell(cellNum);
-					cells[cellNum] = value(cell);
-				}
-				result.add(cells);
 			}
 		}
+		return result;
 	}
 
+	/**
+	 * Return {@code Workbook} ,excel file suffix type contain XLS and XLSX
+	 * 
+	 * @param inputStream
+	 *            file change {@code InputStream}
+	 * @param suffix
+	 *            Excel type contain XLS and XLSX
+	 * @return {@code Workbook}
+	 */
 	private static Workbook workbook(InputStream inputStream, String suffix) {
 		checkArgument(suffix != null && suffix.length() > 0);
 		if (suffix.equals(XLS_SUFFIX))
@@ -123,6 +147,13 @@ public final class Excels {
 			}
 	}
 
+	/**
+	 * Return the {@code String} value by {@code Cell}
+	 * 
+	 * @param cell
+	 *            the excel column value object
+	 * @return {@code String}
+	 */
 	public static String value(Cell cell) {
 		String value = "";
 		if (cell == null) {
@@ -148,10 +179,10 @@ public final class Excels {
 			value = "";
 			break;
 		case Cell.CELL_TYPE_ERROR:
-			value = "非法字符";
+			value = "UNKNOW";
 			break;
 		default:
-			value = "未知类型";
+			value = "UNKNOW";
 			break;
 		}
 		return value;

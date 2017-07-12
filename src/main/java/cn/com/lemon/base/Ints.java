@@ -23,8 +23,6 @@ public final class Ints {
 
 	/**
 	 * The largest power of two that can be represented as an {@code int}.
-	 *
-	 * @since 10.0
 	 */
 	public static final int MAX_POWER_OF_TWO = 1 << (Integer.SIZE - 2);
 

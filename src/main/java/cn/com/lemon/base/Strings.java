@@ -1,5 +1,7 @@
 package cn.com.lemon.base;
 
+import static cn.com.lemon.base.Preassert.checkNotNull;
+
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 
@@ -12,6 +14,23 @@ import java.security.MessageDigest;
  * @version 1.0
  */
 public class Strings {
+
+	/**
+	 * Return the file suffix {@code String} value
+	 * 
+	 * @param fileName
+	 *            the file name{@code String} (for example a.jpg)
+	 * @param isContainDot
+	 *            the file suffix value is contain dot
+	 * @return {@code String} the suffix value
+	 */
+	public static String suffix(String fileName, boolean isContainDot) {
+		checkNotNull(fileName);
+		if (isContainDot)
+			return fileName.substring(fileName.lastIndexOf("."));
+		else
+			return fileName.substring(fileName.lastIndexOf(".") + 1);
+	}
 
 	/**
 	 * Returns the given string if it is non-null; the empty string otherwise.
@@ -111,6 +130,55 @@ public class Strings {
 	 */
 	public static String subString(String string, int length) {
 		return subString(string, length, null, "GBK");
+	}
+
+	/**
+	 * Returns a string containing the supplied {@code String} values separated
+	 * by {@code separator}. For example, {@code join("-", "a", "b", "c")}
+	 * returns the string {@code "a-b-c"}.
+	 *
+	 * @param separator
+	 *            the text that should appear between consecutive values in the
+	 *            resulting string (but not at the start or end)
+	 * @param array
+	 *            an array of {@code String} values, possibly empty
+	 */
+	public static String join(String separator, String... array) {
+		checkNotNull(separator);
+		if (array.length == 0) {
+			return "";
+		}
+		// For pre-sizing a builder, just get the right order of magnitude
+		StringBuilder builder = new StringBuilder(array.length * 5);
+		builder.append(array[0]);
+		for (int i = 1; i < array.length; i++) {
+			builder.append(separator).append(array[i]);
+		}
+		return builder.toString();
+	}
+
+	/**
+	 * Returns a array {@code int} values split by {@code separator}. For
+	 * example, {@code split("-", "a", "b", "c")} returns the string
+	 * {@code "{a,b,c}"}.
+	 *
+	 * @param separator
+	 *            the text that should appear between consecutive values in the
+	 *            resulting string (but not at the start or end)
+	 * @param array
+	 *            an string of {@code String} values, possibly empty
+	 */
+	public static String[] split(String separator, String array) {
+		checkNotNull(separator);
+		if (null != array && array.length() == 0) {
+			return null;
+		}
+		int size = array.split(separator).length;
+		String[] result = new String[size];
+		for (int i = 0; i < size; i++) {
+			result[i] = array.split(separator)[i];
+		}
+		return result;
 	}
 
 	/**
