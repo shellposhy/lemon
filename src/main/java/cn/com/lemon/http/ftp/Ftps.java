@@ -1,76 +1,221 @@
 package cn.com.lemon.http.ftp;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.SocketException;
 
-import static cn.com.lemon.base.Preassert.checkNotNull;
-
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.net.ftp.FTPClient;
-import org.apache.log4j.Logger;
 
-public final class Ftps {
-	private static final Logger LOG = Logger.getLogger(Ftps.class.getName());
-	private static final FTPClient ftpClient = new FTPClient();
+public class Ftps {
 
-	protected String url;
-	protected int port;
-	protected String appkey;
-	protected String appSecret;
-	protected boolean connected = false;
-	
-	public static void main(String[] args) {
-		new Ftps("192.168.2.39", 21);
-	}
-
-	public boolean write(String appkey, String appSecret, String path, String name, InputStream stream) {
-		checkNotNull(appkey);
-		checkNotNull(appSecret);
-		if (connected) {
+	public static boolean upload(String hosName, int port, String userName, String password, String directory,
+			String srcFileName, String destName) throws IOException {
+		FTPClient ftpClient = new FTPClient();
+		FileInputStream fis = null;
+		boolean result = false;
+		try {
+			ftpClient.connect(hosName, port);
+			ftpClient.login(userName, password);
+			ftpClient.enterLocalPassiveMode();
+			File srcFile = new File(srcFileName);
+			fis = new FileInputStream(srcFile);
+			ftpClient.changeWorkingDirectory(directory);
+			ftpClient.setBufferSize(1024);
+			ftpClient.setControlEncoding("utf-8");
+			ftpClient.setFileType(FTPClient.BINARY_FILE_TYPE);
+			result = ftpClient.storeFile(destName, fis);
+			return result;
+		} catch (SocketException e) {
+			throw e;
+		} catch (FileNotFoundException e) {
+			throw new FileNotFoundException();
+		} catch (IOException e) {
+			throw new IOException(e);
+		} finally {
+			IOUtils.closeQuietly(fis);
 			try {
-				if (ftpClient.login(appkey, appSecret)) {
-					ftpClient.changeWorkingDirectory(path);
-					ftpClient.storeFile(name, stream);
-					stream.close();
-					ftpClient.logout();
-					return true;
-				} else {
-					LOG.debug("===== [" + appkey + "]  is't exist or password error=====");
-					return false;
-				}
+				ftpClient.disconnect();
 			} catch (IOException e) {
-				LOG.debug("===== [" + appkey + "]  Ftp Login is  an  I/O error=====");
-				return false;
-			} finally {
-				connected = false;
-				if (ftpClient.isConnected()) {
-					try {
-						ftpClient.disconnect();
-						connected = false;
-					} catch (IOException e) {
-						LOG.debug("=====Ftp disconnect is exist error=====");
-					}
-				}
+				throw new RuntimeException("关闭FTP连接发生异常！", e);
 			}
 		}
-		return false;
 	}
 
-	{
+	public static boolean download(String ftpUrl, String userName, int port, String password, String directory,
+			String destFileName, String downloadName) throws IOException {
+		FTPClient ftpClient = new FTPClient();
+		boolean result = false;
 		try {
-			ftpClient.connect(url, port);
-			connected = true;
+			ftpClient.connect(ftpUrl, port);
+			ftpClient.login(userName, password);
+			ftpClient.enterLocalPassiveMode();
+			ftpClient.setBufferSize(1024);
+			ftpClient.changeWorkingDirectory(directory);
+			ftpClient.setFileType(FTPClient.BINARY_FILE_TYPE);
+			result = ftpClient.retrieveFile(destFileName, new FileOutputStream(downloadName));
+			return result;
 		} catch (SocketException e) {
-			LOG.debug("===== [" + url + "] [" + port + "] Ftp connected is  an  socket error=====");
-			e.printStackTrace();
+			throw e;
+		} catch (FileNotFoundException e) {
+			throw new FileNotFoundException();
 		} catch (IOException e) {
-			LOG.debug("===== [" + url + "] [" + port + "] Ftp connected is  an I/O error=====");
-			e.printStackTrace();
+			throw new IOException(e);
+		} finally {
+			try {
+				ftpClient.disconnect();
+			} catch (IOException e) {
+				throw new RuntimeException("关闭FTP连接发生异常！", e);
+			}
 		}
 	}
 
-	public Ftps(String url, int port) {
-		this.url = url;
-		this.port = port;
+	public static boolean rename(String ftpUrl, String userName, int port, String password, String directory,
+			String oldFileName, String newFileName) throws IOException {
+		boolean result = false;
+		FTPClient ftpClient = new FTPClient();
+		try {
+			ftpClient.connect(ftpUrl, port);
+			ftpClient.login(userName, password);
+			ftpClient.enterLocalPassiveMode();
+			ftpClient.changeWorkingDirectory(directory);
+			result = ftpClient.rename(oldFileName, newFileName);
+			return result;
+		} catch (SocketException e) {
+			throw e;
+		} catch (IOException e) {
+			throw new IOException("连接ftp服务器失败！", e);
+		} finally {
+			try {
+				ftpClient.disconnect();
+			} catch (IOException e) {
+				throw new RuntimeException("关闭FTP连接发生异常！", e);
+			}
+		}
 	}
+
+	public static boolean remove(String ftpUrl, String userName, int port, String password, String directory,
+			String fileName) throws IOException {
+		boolean result = false;
+		FTPClient ftpClient = new FTPClient();
+		try {
+			ftpClient.connect(ftpUrl, port);
+			ftpClient.login(userName, password);
+			ftpClient.enterLocalPassiveMode();
+			ftpClient.changeWorkingDirectory(directory);
+			result = ftpClient.deleteFile(fileName);// 删除远程文件
+			return result;
+		} catch (SocketException e) {
+			throw e;
+		} catch (IOException e) {
+			throw new IOException("连接ftp服务器失败！", e);
+		} finally {
+			try {
+				ftpClient.disconnect();
+			} catch (IOException e) {
+				throw new RuntimeException("关闭FTP连接发生异常！", e);
+			}
+		}
+	}
+
+	public static boolean makeDirecotory(String ftpUrl, String userName, int port, String password, String directory,
+			String newDirectory) throws IOException {
+		boolean result = false;
+		FTPClient ftpClient = new FTPClient();
+		try {
+			ftpClient.connect(ftpUrl, port);
+			ftpClient.login(userName, password);
+			ftpClient.enterLocalPassiveMode();
+			ftpClient.changeWorkingDirectory(directory);
+			result = ftpClient.makeDirectory(newDirectory);// 创建新目录
+			return result;
+		} catch (SocketException e) {
+			throw e;
+		} catch (IOException e) {
+			throw new IOException("连接ftp服务器失败！", e);
+		} finally {
+			try {
+				ftpClient.disconnect();
+			} catch (IOException e) {
+				throw new RuntimeException("关闭FTP连接发生异常！", e);
+			}
+		}
+	}
+
+	public static boolean renameDirecotory(String ftpUrl, String userName, int port, String password, String directory,
+			String oldDirectory, String newDirectory) throws IOException {
+		boolean result = false;
+		FTPClient ftpClient = new FTPClient();
+		try {
+			ftpClient.connect(ftpUrl, port);
+			ftpClient.login(userName, password);
+			ftpClient.enterLocalPassiveMode();
+			ftpClient.changeWorkingDirectory(directory);
+			result = ftpClient.rename(oldDirectory, newDirectory);
+			return result;
+		} catch (SocketException e) {
+			throw e;
+		} catch (IOException e) {
+			throw new IOException("连接ftp服务器失败！", e);
+		} finally {
+			try {
+				ftpClient.disconnect();
+			} catch (IOException e) {
+				throw new RuntimeException("关闭FTP连接发生异常！", e);
+			}
+		}
+	}
+
+	public static boolean removeDirecotory(String ftpUrl, String userName, int port, String password, String directory,
+			String deldirectory) throws IOException {
+		boolean result = false;
+		FTPClient ftpClient = new FTPClient();
+		try {
+			ftpClient.connect(ftpUrl, port);
+			ftpClient.login(userName, password);
+			ftpClient.enterLocalPassiveMode();
+			ftpClient.changeWorkingDirectory(directory);
+			result = ftpClient.removeDirectory(deldirectory);// 删除目录
+			return result;
+		} catch (SocketException e) {
+			throw e;
+		} catch (IOException e) {
+			throw new IOException("连接ftp服务器失败！", e);
+		} finally {
+			try {
+				ftpClient.disconnect();
+			} catch (IOException e) {
+				throw new RuntimeException("关闭FTP连接发生异常！", e);
+			}
+		}
+	}
+
+	public static String[] list(String ftpUrl, String userName, int port, String password, String directory)
+			throws IOException {
+		FTPClient ftpClient = new FTPClient();
+		try {
+			ftpClient.connect(ftpUrl, port);
+			ftpClient.login(userName, password);
+			ftpClient.enterLocalPassiveMode();
+			ftpClient.setControlEncoding("utf-8");
+			ftpClient.changeWorkingDirectory(directory);
+			ftpClient.enterLocalPassiveMode();
+			String[] list = ftpClient.listNames();
+			return list;
+		} catch (SocketException e) {
+			throw e;
+		} catch (IOException e) {
+			throw new IOException("连接ftp服务器失败！", e);
+		} finally {
+			try {
+				ftpClient.disconnect();
+			} catch (IOException e) {
+				throw new RuntimeException("关闭FTP连接发生异常！", e);
+			}
+		}
+	}
+
 }
