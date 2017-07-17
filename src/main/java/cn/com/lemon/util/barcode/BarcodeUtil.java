@@ -23,7 +23,9 @@ import sun.misc.BASE64Encoder;
  * @author shishb
  * @version 1.0
  */
-public class BarcodeUtil {
+public final class BarcodeUtil {
+	private BarcodeUtil() {
+	}
 
 	/**
 	 * Create the QRCode and Return the picture path

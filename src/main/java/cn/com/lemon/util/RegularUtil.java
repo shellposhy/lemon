@@ -11,7 +11,11 @@ import java.util.regex.Pattern;
  * @author shellpo shih
  * @version 1.0
  */
-public class RegularUtil {
+public final class RegularUtil {
+
+	private RegularUtil() {
+	}
+
 	public static boolean matchNumeric(String str) {
 		String regex = "^[0-9]*$";
 		return match(regex, str);

@@ -31,9 +31,12 @@ import cn.com.lemon.framework.model.Zip;
  * @author shellpo shih
  * @version 1.0
  */
-public class FileUtil {
+public final class FileUtil {
 	private static final Logger LOG = Logger.getLogger(FileUtil.class);
 	private static int BUFFER_SIZE = 1048576;
+
+	private FileUtil() {
+	}
 
 	/* ==============folder handler=============== */
 	public static boolean createFolder(String folder) {

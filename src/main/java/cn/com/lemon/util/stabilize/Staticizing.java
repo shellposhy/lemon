@@ -30,8 +30,11 @@ import org.apache.log4j.Logger;
  * @author shellpo shih
  * @version 1.0
  */
-public class Staticizing {
+public final class Staticizing {
 	private static final Logger logger = Logger.getLogger(Staticizing.class);
+
+	private Staticizing() {
+	}
 
 	/**
 	 * Create the output files
@@ -63,9 +66,6 @@ public class Staticizing {
 			return false;
 		}
 		return true;
-	}
-
-	public Staticizing() {
 	}
 
 }

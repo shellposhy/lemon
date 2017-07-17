@@ -18,7 +18,10 @@ import javax.crypto.spec.SecretKeySpec;
  * @author shishb
  * @version 1.0
  */
-public class ContentEncryptUtil {
+public final class ContentEncryptUtil {
+
+	private ContentEncryptUtil() {
+	}
 
 	/**
 	 * Encrypt the content

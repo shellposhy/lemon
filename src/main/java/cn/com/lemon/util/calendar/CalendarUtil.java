@@ -18,7 +18,10 @@ import cn.com.lemon.common.enums.date.EDateType;
  * @author shellpo shih
  * @version 1.0
  */
-public class CalendarUtil {
+public final class CalendarUtil {
+
+	private CalendarUtil() {
+	}
 
 	/* ====================================== */
 	/* ==============common utilities=========== */

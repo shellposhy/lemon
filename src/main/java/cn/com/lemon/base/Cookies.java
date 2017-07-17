@@ -16,7 +16,10 @@ import javax.servlet.http.HttpServletResponse;
  * @author shellpo shih
  * @version 1.0
  */
-public class Cookies {
+public final class Cookies {
+
+	private Cookies() {
+	}
 
 	/**
 	 * Write cookie value

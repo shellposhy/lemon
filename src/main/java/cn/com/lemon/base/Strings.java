@@ -13,7 +13,9 @@ import java.security.MessageDigest;
  * @author shellpo shih
  * @version 1.0
  */
-public class Strings {
+public final class Strings {
+	private Strings() {
+	}
 
 	/**
 	 * Return the file suffix {@code String} value

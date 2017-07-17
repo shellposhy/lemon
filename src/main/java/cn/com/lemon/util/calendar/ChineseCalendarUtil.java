@@ -22,7 +22,7 @@ import java.util.regex.Pattern;
  * @author shellpo shih
  * @version 1.0
  */
-public class ChineseCalendarUtil {
+public final class ChineseCalendarUtil {
 
 	/* ===========Base Properties=================== */
 	private boolean isFinded = false;
