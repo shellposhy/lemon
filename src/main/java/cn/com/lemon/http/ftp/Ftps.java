@@ -129,6 +129,25 @@ public class Ftps {
 		}
 	}
 
+	/**
+	 * Return {@code true} ,if the file is renamed success
+	 * 
+	 * @param hostName
+	 *            The ftp server hostname
+	 * @param port
+	 *            The ftp server port,default 21
+	 * @param account
+	 *            The ftp server account name
+	 * @param password
+	 *            The ftp server account password
+	 * @param directory
+	 *            The ftp work directory
+	 * @param oldFileName
+	 *            The old file name
+	 * @param newFileName
+	 *            The new file name
+	 * @return {@code true}if the file is renamed success
+	 */
 	public static boolean rename(String hostName, int port, String account, String password, String directory,
 			String oldFileName, String newFileName) {
 		boolean result = false;
@@ -155,6 +174,23 @@ public class Ftps {
 		}
 	}
 
+	/**
+	 * Return {@code true} ,if the file is deleted success
+	 * 
+	 * @param hostName
+	 *            The ftp server hostname
+	 * @param port
+	 *            The ftp server port,default 21
+	 * @param account
+	 *            The ftp server account name
+	 * @param password
+	 *            The ftp server account password
+	 * @param directory
+	 *            The ftp work directory
+	 * @param fileName
+	 *            The file name
+	 * @return {@code true}if the file is deleted success
+	 */
 	public static boolean remove(String hostName, int port, String account, String password, String directory,
 			String fileName) {
 		boolean result = false;
@@ -181,6 +217,23 @@ public class Ftps {
 		}
 	}
 
+	/**
+	 * Return {@code true} ,if the new directory is created success
+	 * 
+	 * @param hostName
+	 *            The ftp server hostname
+	 * @param port
+	 *            The ftp server port,default 21
+	 * @param account
+	 *            The ftp server account name
+	 * @param password
+	 *            The ftp server account password
+	 * @param directory
+	 *            The ftp work directory
+	 * @param newDirectory
+	 *            The new directory
+	 * @return {@code true}if the new directory is created success
+	 */
 	public static boolean makeDirecotory(String hostName, int port, String account, String password, String directory,
 			String newDirectory) {
 		boolean result = false;
@@ -207,6 +260,25 @@ public class Ftps {
 		}
 	}
 
+	/**
+	 * Return {@code true} ,if the directory is renamed success
+	 * 
+	 * @param hostName
+	 *            The ftp server hostname
+	 * @param port
+	 *            The ftp server port,default 21
+	 * @param account
+	 *            The ftp server account name
+	 * @param password
+	 *            The ftp server account password
+	 * @param directory
+	 *            The ftp work directory
+	 * @param oldDirectory
+	 *            The old directory name
+	 * @param newDirectory
+	 *            The new directory name
+	 * @return {@code true}if the directory is renamed success
+	 */
 	public static boolean renameDirecotory(String hostName, int port, String account, String password, String directory,
 			String oldDirectory, String newDirectory) {
 		boolean result = false;
@@ -233,6 +305,23 @@ public class Ftps {
 		}
 	}
 
+	/**
+	 * Return {@code true} ,if the directory is deleted success
+	 * 
+	 * @param hostName
+	 *            The ftp server hostname
+	 * @param port
+	 *            The ftp server port,default 21
+	 * @param account
+	 *            The ftp server account name
+	 * @param password
+	 *            The ftp server account password
+	 * @param directory
+	 *            The ftp work directory
+	 * @param delDirectory
+	 *            The directory name
+	 * @return {@code true}if the directory is deleted success
+	 */
 	public static boolean removeDirecotory(String hostName, int port, String account, String password, String directory,
 			String delDirectory) {
 		boolean result = false;
@@ -259,6 +348,21 @@ public class Ftps {
 		}
 	}
 
+	/**
+	 * Return {@code Array}, all files in given directory
+	 * 
+	 * @param hostName
+	 *            The ftp server hostname
+	 * @param port
+	 *            The ftp server port,default 21
+	 * @param account
+	 *            The ftp server account name
+	 * @param password
+	 *            The ftp server account password
+	 * @param directory
+	 *            The ftp work directory
+	 * @return {@code Array},List all files in given directory
+	 */
 	public static String[] list(String hostname, int port, String account, String password, String directory) {
 		FTPClient ftpClient = new FTPClient();
 		try {
