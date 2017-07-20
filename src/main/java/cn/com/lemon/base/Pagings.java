@@ -30,32 +30,7 @@ public final class Pagings {
 	 */
 	public static Paging page(int size, int total, int cur) {
 		checkArgument(size > 0 && cur > 0);
-		if (total > 0) {
-			paging.setCount(total % size == 0 ? total / size : total / size + 1);
-			checkArgument(cur <= paging.getCount(),
-					"The current page number must be lesser than the count page number!");
-			paging.setPre(cur > 1 && paging.getCount() > 1 && cur <= paging.getCount() ? cur - 1 : 1);
-			paging.setNext(cur + 1 <= paging.getCount() ? cur + 1 : paging.getCount());
-			if (LOOP_SIZE >= paging.getCount()) {
-				paging.setStart(1);
-				paging.setEnd(paging.getCount());
-			} else {
-				paging.setStart(cur <= LOOP_SIZE ? 1
-						: cur % LOOP_SIZE != 0 ? ((cur / LOOP_SIZE) * LOOP_SIZE + 1)
-								: ((cur / LOOP_SIZE) - 1) * LOOP_SIZE + 1);
-				paging.setEnd((paging.getStart() + LOOP_SIZE - 1) > paging.getCount() ? paging.getCount()
-						: paging.getStart() + LOOP_SIZE - 1);
-			}
-		} else {// no data
-			paging.setCount(0);
-			paging.setPre(0);
-			paging.setNext(0);
-			paging.setStart(0);
-			paging.setEnd(0);
-		}
-		paging.setSize(size);
-		paging.setTotal(total);
-		paging.setCur(cur);
+		page(size, total, cur, LOOP_SIZE);
 		return paging;
 	}
 
