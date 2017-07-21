@@ -24,31 +24,7 @@ import java.util.regex.Pattern;
  */
 public final class ChineseCalendarUtil {
 
-	/* ===========Base Properties=================== */
-	private boolean isFinded = false;
-	private boolean isSFestival = false;
-	private boolean isLFestival = false;
-	private String sFestivalName = "";
-	private String lFestivalName = "";
-	private String description = "";
-	private boolean isHoliday = false;
-
-	private Calendar solar;
-	private int lunarYear;
-	private int lunarMonth;
-	private int lunarDay;
-	private boolean isLeap;
-	private boolean isLeapYear;
-	private int solarYear;
-	private int solarMonth;
-	private int solarDay;
-	private int cyclicalYear = 0;
-	private int cyclicalMonth = 0;
-	private int cyclicalDay = 0;
-	private int maxDayInMonth = 29;
-
 	/* ==================Utilities=================== */
-
 	/**
 	 * Constructor
 	 * 
@@ -534,6 +510,28 @@ public final class ChineseCalendarUtil {
 		this.isFinded = true;
 	}
 
+	/* ===========Base Properties=================== */
+	private boolean isFinded = false;
+	private boolean isSFestival = false;
+	private boolean isLFestival = false;
+	private String sFestivalName = "";
+	private String lFestivalName = "";
+	private String description = "";
+	private boolean isHoliday = false;
+
+	private Calendar solar;
+	private int lunarYear;
+	private int lunarMonth;
+	private int lunarDay;
+	private boolean isLeap;
+	private boolean isLeapYear;
+	private int solarYear;
+	private int solarMonth;
+	private int solarDay;
+	private int cyclicalYear = 0;
+	private int cyclicalMonth = 0;
+	private int cyclicalDay = 0;
+	private int maxDayInMonth = 29;
 	/* ==================Initialize Properties================ */
 	private final static int[] LunarInfo = { 0x4bd8, 0x4ae0, 0xa570, 0x54d5, 0xd260, 0xd950, 0x5554, 0x56af, 0x9ad0,
 			0x55d2, 0x4ae0, 0xa5b6, 0xa4d0, 0xd250, 0xd295, 0xb54f, 0xd6a0, 0xada2, 0x95b0, 0x4977, 0x497f, 0xa4b0,
