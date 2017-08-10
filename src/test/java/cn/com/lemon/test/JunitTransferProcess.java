@@ -6,8 +6,8 @@ import cn.com.lemon.http.big.download.DownloadProcess;
 public class JunitTransferProcess {
 
 	public JunitTransferProcess() {
-		Transfer transfer = new Transfer("http://a.gdown.baidu.com/data/wisegame/dcdafeb31f9b2034/xunlei_10906.apk",
-				"d:/test", "22.apk", 10, 0);
+		Transfer transfer = new Transfer("http://speed.myzone.cn/WindowsXP_SP2.exe",
+				"d:/test", "WindowsXP_SP2.exe", 10, 0);
 		DownloadProcess process = new DownloadProcess(transfer);
 		process.start();
 	}
