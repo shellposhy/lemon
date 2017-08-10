@@ -2,7 +2,7 @@ package cn.com.lemon.base;
 
 import cn.com.lemon.framework.paging.Paging;
 
-import static cn.com.lemon.base.Preassert.checkArgument;
+import static cn.com.lemon.base.Preasserts.checkArgument;
 
 /**
  * Static utility methods pertaining to {@code Paging} primitives.

@@ -1,6 +1,6 @@
 package cn.com.lemon.framework.sort;
 
-import static cn.com.lemon.base.Preassert.checkArgument;
+import static cn.com.lemon.base.Preasserts.checkArgument;
 
 public final class SelectSorts {
 	private SelectSorts() {

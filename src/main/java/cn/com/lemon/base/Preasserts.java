@@ -19,9 +19,9 @@ package cn.com.lemon.base;
  * @author shellpo shih
  * @version 1.0
  */
-public final class Preassert {
+public final class Preasserts {
 
-	private Preassert() {
+	private Preasserts() {
 	}
 
 	/**

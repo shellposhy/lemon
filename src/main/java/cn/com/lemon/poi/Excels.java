@@ -15,7 +15,7 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.web.multipart.MultipartFile;
 
-import static cn.com.lemon.base.Preassert.checkArgument;
+import static cn.com.lemon.base.Preasserts.checkArgument;
 import static cn.com.lemon.base.Strings.suffix;
 
 /**

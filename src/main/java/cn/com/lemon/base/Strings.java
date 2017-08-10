@@ -1,6 +1,6 @@
 package cn.com.lemon.base;
 
-import static cn.com.lemon.base.Preassert.checkNotNull;
+import static cn.com.lemon.base.Preasserts.checkNotNull;
 
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;

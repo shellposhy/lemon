@@ -1,7 +1,7 @@
 package cn.com.lemon.base;
 
-import static cn.com.lemon.base.Preassert.checkNotNull;
-import static cn.com.lemon.base.Preassert.checkArgument;
+import static cn.com.lemon.base.Preasserts.checkNotNull;
+import static cn.com.lemon.base.Preasserts.checkArgument;
 import static cn.com.lemon.util.RegularUtil.matchNumeric;
 
 /**
