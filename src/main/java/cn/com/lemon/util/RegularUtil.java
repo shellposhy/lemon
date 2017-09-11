@@ -91,6 +91,16 @@ public final class RegularUtil {
 		return match(regex, str);
 	}
 
+	public static boolean matchIpv4(String str) {
+		String regex = "^(25[0-5]|2[0-4]\\d|[0-1]?\\d?\\d)(\\.(25[0-5]|2[0-4]\\d|[0-1]?\\d?\\d)){3}$";
+		return match(regex, str);
+	}
+
+	public static boolean matchIpv6(String str) {
+		String regex = "^((?:[0-9A-Fa-f]{1,4}(?::[0-9A-Fa-f]{1,4})*)?)::((?:[0-9A-Fa-f]{1,4}(?::[0-9A-Fa-f]{1,4})*)?)$";
+		return match(regex, str);
+	}
+
 	private static boolean match(String regex, String str) {
 		if ((str == null) || (str.equals(""))) {
 			return false;
