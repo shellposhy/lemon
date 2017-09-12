@@ -109,7 +109,7 @@ public final class ImageUtil {
 		try {
 			Thumbnails.of(source).watermark(Positions.CENTER, ImageIO.read(waterFile), 0.5f).scale(1L).toFile(target);
 		} catch (IOException e) {
-			e.printStackTrace();
+			LOG.info("=====Wartermark Image Fail!=====");
 		}
 	}
 
@@ -133,7 +133,7 @@ public final class ImageUtil {
 			try {
 				Thumbnails.of(source).size(width, height).toFile(target);
 			} catch (IOException e) {
-				LOG.debug("=====Change Image Fail!=====");
+				LOG.info("=====Change Image Fail!=====");
 			}
 		}
 	}
@@ -170,7 +170,7 @@ public final class ImageUtil {
 		try {
 			Thumbnails.of(source).sourceRegion(Positions.CENTER, width, height).size(width, height).toFile(target);
 		} catch (IOException e) {
-			LOG.debug("=====Image Corp Fail=====");
+			LOG.info("=====Image Corp Fail=====");
 		}
 	}
 
