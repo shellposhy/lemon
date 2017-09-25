@@ -9,9 +9,6 @@ import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-import org.apache.log4j.Logger;
-
-//import cn.com.lemon.http.Monitoring;
 import cn.com.lemon.http.big.Transfer;
 
 /**
@@ -26,7 +23,6 @@ import cn.com.lemon.http.big.Transfer;
  * @version 1.0
  */
 public class DownloadProcess extends Thread {
-	private static Logger LOG = Logger.getLogger(DownloadProcess.class.getName());
 	Transfer transfer = null;
 	long[] startPos;
 	long[] endPos;
@@ -54,10 +50,8 @@ public class DownloadProcess extends Thread {
 			if (first) {
 				length = getFileSize();
 				if (length == -1) {
-					LOG.debug("File Length is not known!");
 					System.err.println("File Length is not known!");
 				} else if (length == -2) {
-					LOG.debug("File is not access!");
 					System.err.println("File is not access!");
 				} else {
 					for (int i = 0; i < startPos.length; i++) {
