@@ -1,4 +1,4 @@
-package cn.com.lemon.test;
+package cn.com.lemon.test.process.model;
 
 public class SynData {
 

@@ -1,7 +1,11 @@
 package cn.com.lemon.util;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import static cn.com.lemon.base.Strings.isNullOrEmpty;
 
 /**
  * The <code>RegularUtil</code>class is basic regular expression utilities.
@@ -18,6 +22,11 @@ public final class RegularUtil {
 
 	public static boolean matchNumeric(String str) {
 		String regex = "^[0-9]*$";
+		return match(regex, str);
+	}
+
+	public static boolean matchNumericLengthLimit(String str, int limit) {
+		String regex = "^[0-9]{" + limit + "}$";
 		return match(regex, str);
 	}
 
@@ -102,11 +111,27 @@ public final class RegularUtil {
 	}
 
 	private static boolean match(String regex, String str) {
-		if ((str == null) || (str.equals(""))) {
+		if (isNullOrEmpty(str)) {
 			return false;
 		}
 		Pattern pattern = Pattern.compile(regex);
 		Matcher matcher = pattern.matcher(str);
 		return matcher.matches();
+	}
+
+	public static List<String> findMatch(String regex, String content) {
+		if (isNullOrEmpty(content)) {
+			return null;
+		}
+		Pattern pattern = Pattern.compile(regex);
+		Matcher matcher = pattern.matcher(content);
+		if (matcher.find()) {
+			List<String> result = new ArrayList<String>();
+			for (int i = 0; i <= matcher.groupCount(); i++) {
+				result.add(matcher.group(i));
+			}
+			return result;
+		}
+		return null;
 	}
 }
