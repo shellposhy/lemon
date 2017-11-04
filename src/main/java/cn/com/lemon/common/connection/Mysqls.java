@@ -1,4 +1,4 @@
-package cn.com.lemon.common.mysql;
+package cn.com.lemon.common.connection;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -13,9 +13,9 @@ import java.sql.SQLException;
  * @author shellpo shih
  * @version 1.0
  */
-public final class Connections {
+public final class Mysqls {
 
-	private Connections() {
+	private Mysqls() {
 	}
 
 	public static final String url = "jdbc:mysql://localhost:3306/fupin?useUnicode=true&characterEncoding=utf-8";

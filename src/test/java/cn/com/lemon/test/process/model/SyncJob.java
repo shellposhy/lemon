@@ -5,7 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 
-import cn.com.lemon.common.mysql.Connections;
+import cn.com.lemon.common.connection.Mysqls;
 
 public class SyncJob implements Runnable {
 	private int num;
@@ -16,7 +16,7 @@ public class SyncJob implements Runnable {
 	}
 
 	public void run() {
-		Connection connection = Connections.newInstance();
+		Connection connection = Mysqls.newInstance();
 		int start = (num - 1) * 120000;
 		int size = 120000;
 		Statement stmt;
@@ -25,7 +25,7 @@ public class SyncJob implements Runnable {
 			ResultSet rs = stmt.executeQuery("SELECT * FROM fa13   LIMIT " + start + "," + size);
 			while (rs.next()) {
 				String code = rs.getString("AAR001");
-				Connection conn = Connections.newInstance();
+				Connection conn = Mysqls.newInstance();
 				Statement st = conn.createStatement();
 				ResultSet old = st.executeQuery("SELECT * FROM fa11 WHERE AAR001='" + code + "'");
 				if (old.next()) {

@@ -46,6 +46,13 @@
 			<version>5.1.44</version>
 		</dependency>
 
+		<!-- oracle -->
+		<dependency>
+			<groupId>cn.com.zhihuigu</groupId>
+			<artifactId>ojdbc6</artifactId>
+			<version>11.2.0.1.0</version>
+		</dependency>
+
 		<!-- thumbnailator -->
 		<dependency>
 			<groupId>net.coobird</groupId>

@@ -1,4 +1,4 @@
-package cn.com.lemon.test.process;
+package cn.com.lemon.test.process.district;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -12,7 +12,7 @@ import java.sql.Statement;
 import java.util.Map;
 import java.util.TreeMap;
 
-import cn.com.lemon.common.mysql.Connections;
+import cn.com.lemon.common.connection.Mysqls;
 import cn.com.lemon.test.process.model.SynData;
 
 /**
@@ -119,7 +119,7 @@ public final class DistrictProcess {
 	 */
 	public static Map<String, SynData> data() throws SQLException {
 		Map<String, SynData> result = new TreeMap<String, SynData>();
-		Connection connection = Connections.newInstance();
+		Connection connection = Mysqls.newInstance();
 		Statement statement = connection.createStatement();
 		ResultSet resultSet = statement.executeQuery("SELECT * FROM fa11");
 		if (resultSet.next()) {
