@@ -8,6 +8,9 @@ public class SynData {
 	private String AAR002;
 	private String AAA110;
 
+	// 新区划编码
+	private String AAA112;
+
 	public Integer getAAA011() {
 		return AAA011;
 	}
@@ -46,6 +49,14 @@ public class SynData {
 
 	public void setAAA110(String aAA110) {
 		AAA110 = aAA110;
+	}
+
+	public String getAAA112() {
+		return AAA112;
+	}
+
+	public void setAAA112(String aAA112) {
+		AAA112 = aAA112;
 	}
 
 }
