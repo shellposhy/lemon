@@ -9,6 +9,8 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -26,7 +28,15 @@ public final class DistrictProcess {
 	}
 
 	public static void main(String[] args) throws SQLException, IOException {
-		DistrictProcess.process("C:/Users/Administrator/Desktop/new.csv", "C:/Users/Administrator/Desktop/fa15.sql");
+		// DistrictProcess.process("C:/Users/Administrator/Desktop/new.csv",
+		// "C:/Users/Administrator/Desktop/fa15.sql");
+		String time = new SimpleDateFormat("yyyyMMdd").format(new Date());
+		String dirpath = "D:/test/";
+		dirpath = dirpath + time.substring(0, 4) + "/" + time.substring(4, 6) + "/";
+		File path=new File(dirpath);
+		if(!path.exists()){
+			path.mkdirs();
+		}
 	}
 
 	public static void process(String dataFileName, String output) throws SQLException, IOException {
