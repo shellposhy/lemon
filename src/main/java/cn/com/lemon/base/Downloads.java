@@ -55,7 +55,6 @@ public final class Downloads {
 				return "attachment;filename=" + fileName;
 			}
 		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
 			return "attachment;filename=" + fileName;
 		}
 	}
