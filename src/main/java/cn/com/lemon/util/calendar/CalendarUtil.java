@@ -7,6 +7,7 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 
 import cn.com.lemon.common.enums.date.EDateType;
+import static cn.com.lemon.base.Strings.isNullOrEmpty;
 
 /**
  * The <code>CalendarUtil</code> class is the base <code>Calendar</code>
@@ -261,7 +262,20 @@ public final class CalendarUtil {
 		aCalendar.setTime(to);
 		int end = aCalendar.get(Calendar.DAY_OF_YEAR);
 		return end - start;
+	}
 
+	public static boolean isDateString(String dateString, String dateFormat) {
+		if (isNullOrEmpty(dateString) || isNullOrEmpty(dateFormat)) {
+			return false;
+		}
+		try {
+			SimpleDateFormat format = new SimpleDateFormat(dateFormat);
+			format.setLenient(false);
+			format.parse(dateString);
+			return true;
+		} catch (Exception e) {
+			return false;
+		}
 	}
 
 	/* ====================================== */
