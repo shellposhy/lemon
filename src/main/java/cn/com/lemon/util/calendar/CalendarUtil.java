@@ -27,7 +27,7 @@ public final class CalendarUtil {
 	/* ====================================== */
 	/* ==============common utilities=========== */
 	/* ===================================== */
-	private static Date convert(Date date, String format) {
+	public static Date convert(Date date, String format) {
 		try {
 			SimpleDateFormat dateFormat = new SimpleDateFormat(format);
 			String dateStr = dateFormat.format(date);
@@ -38,7 +38,7 @@ public final class CalendarUtil {
 		}
 	}
 
-	private static Date convert(String param, String format) {
+	public static Date convert(String param, String format) {
 		SimpleDateFormat sdf = new SimpleDateFormat(format);
 		try {
 			return sdf.parse(param);
