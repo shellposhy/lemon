@@ -61,7 +61,12 @@ public final class RegularUtil {
 	}
 
 	public static boolean match18IDCard(String str) {
-		String regex = "^(\\d{6})(18|19|20)?(\\d{2})([01]\\d)([0123]\\d)(\\d{3})(\\d|X|x)?$";
+		String regex = "^[1-9]\\d{5}(18|19|([23]\\d))\\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\\d{3}[0-9Xx]$";
+		return match(regex, str);
+	}
+
+	public static boolean match15IDCard(String str) {
+		String regex = "^[1-9]\\d{5}\\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\\d{2}[0-9Xx]$";
 		return match(regex, str);
 	}
 
