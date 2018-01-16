@@ -15,7 +15,7 @@ import static cn.com.lemon.base.Strings.isNullOrEmpty;
  * @author shellpo shih
  * @version 1.0
  */
-public class Desensitives {
+public final class Desensitives {
 
 	private Desensitives() {
 	}
