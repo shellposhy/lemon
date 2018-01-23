@@ -46,6 +46,10 @@ public final class Zips {
 	 *            null
 	 * @return
 	 */
+	public static void unzip(String srcPath) {
+		unzip(srcPath, null);
+	}
+
 	public static void unzip(String srcPath, String dest) {
 		File file = new File(srcPath);
 		checkArgument(file.exists(), "The " + file + " is not exist!");
@@ -102,6 +106,10 @@ public final class Zips {
 	 *            {@code String} the destination file path
 	 * @return
 	 */
+	public static void zip(String srcFilePath) {
+		zip(srcFilePath, null);
+	}
+
 	public static void zip(String srcFilePath, String destFilePath) {
 		File srcFile = new File(srcFilePath);
 		checkArgument(srcFile.exists(), "The " + srcFilePath + " is not exist!");
