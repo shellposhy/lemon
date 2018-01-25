@@ -1,4 +1,4 @@
-package cn.com.lemon.base;
+package cn.com.lemon.base.tool;
 
 import cn.com.lemon.framework.paging.Paging;
 

@@ -1,4 +1,4 @@
-package cn.com.lemon.base;
+package cn.com.lemon.base.tool;
 
 import java.io.UnsupportedEncodingException;
 import javax.servlet.http.HttpServletRequest;
