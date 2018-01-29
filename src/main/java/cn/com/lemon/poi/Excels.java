@@ -153,7 +153,7 @@ public final class Excels {
 	 *            the excel column value object
 	 * @return {@code String}
 	 */
-	public static String value(Cell cell) {
+	private static String value(Cell cell) {
 		String value = "";
 		if (cell == null) {
 			return value;
