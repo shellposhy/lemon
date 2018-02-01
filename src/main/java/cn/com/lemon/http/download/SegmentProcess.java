@@ -1,10 +1,10 @@
-package cn.com.lemon.http.big.download;
+package cn.com.lemon.http.download;
 
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-import cn.com.lemon.http.big.TransferStorage;
+import cn.com.lemon.http.TransferStorage;
 
 /**
  * Download large files process main class,provider threads download.

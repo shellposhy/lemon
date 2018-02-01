@@ -1,4 +1,4 @@
-package cn.com.lemon.http.big;
+package cn.com.lemon.http;
 
 /**
  * The <code>Transfer</code> class is the basic bean to describe file info when

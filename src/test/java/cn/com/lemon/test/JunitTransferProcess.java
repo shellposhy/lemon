@@ -1,7 +1,7 @@
 package cn.com.lemon.test;
 
-import cn.com.lemon.http.big.Transfer;
-import cn.com.lemon.http.big.download.DownloadProcess;
+import cn.com.lemon.http.Transfer;
+import cn.com.lemon.http.download.DownloadProcess;
 
 public class JunitTransferProcess {
 
