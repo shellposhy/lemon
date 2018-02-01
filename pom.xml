@@ -12,6 +12,7 @@
 		<jdk.version>1.7</jdk.version>
 		<spring.version>3.2.3.RELEASE</spring.version>
 		<jackson.version>2.9.4</jackson.version>
+		<xstream_version>1.4.9</xstream_version>
 	</properties>
 
 	<!-- dependencies -->
@@ -55,6 +56,18 @@
 			<groupId>commons-collections</groupId>
 			<artifactId>commons-collections</artifactId>
 			<version>3.2.2</version>
+		</dependency>
+
+		<!-- xstream -->
+		<dependency>
+			<groupId>com.thoughtworks.xstream</groupId>
+			<artifactId>xstream</artifactId>
+			<version>${xstream_version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.codehaus.jettison</groupId>
+			<artifactId>jettison</artifactId>
+			<version>1.3.8</version>
 		</dependency>
 
 		<!-- MySQL -->
