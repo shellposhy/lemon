@@ -20,8 +20,6 @@ import org.apache.tools.zip.ZipEntry;
 import org.apache.tools.zip.ZipFile;
 import org.apache.tools.zip.ZipOutputStream;
 
-import cn.com.lemon.framework.model.Zip;
-
 /**
  * The <code>FileUtil</code> class,the basic file and folder handler
  * 

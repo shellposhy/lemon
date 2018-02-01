@@ -1,4 +1,4 @@
-package cn.com.lemon.framework.model;
+package cn.com.lemon.util.resource;
 
 /**
  * The zip bean properties

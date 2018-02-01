@@ -7,6 +7,16 @@ import static cn.com.lemon.base.Strings.isNullOrEmpty;
 
 import com.thoughtworks.xstream.XStream;
 
+/**
+ * Static utility methods pertaining to {@code Xmls} primitives.
+ * <p>
+ * The base utility contain basic operate.
+ * <p>
+ * Create XML data from Java Object and Parser XML data to Java Object
+ * 
+ * @author shellpo shih
+ * @version 1.0
+ */
 public final class Xmls {
 	private static final Map<String, XStream> XSTREAMS = new ConcurrentHashMap<String, XStream>();
 	private static final String DEFAULT_NAME = "FALSE";
@@ -30,6 +40,16 @@ public final class Xmls {
 		return stream;
 	}
 
+	/**
+	 * Create XML data from Java Object
+	 * 
+	 * @param data
+	 *            {@code Object} the data
+	 * @param isUseCDATA
+	 *            is use CDATA
+	 * @param clazz
+	 * @return {@link String} the xml data
+	 */
 	public static String generator(Object data, boolean isUseCDATA, Class<?> clazz) {
 		if (null == data)
 			return null;
@@ -39,8 +59,18 @@ public final class Xmls {
 		return DEFAULT_XML_HEADER + xstream.toXML(data);
 	}
 
+	/**
+	 * Parser XML data to Java Object
+	 * 
+	 * @param data
+	 *            {@code Object} the data
+	 * @param isUseCDATA
+	 *            is use CDATA
+	 * @param clazz
+	 * @return {@link String} the xml data
+	 */
 	@SuppressWarnings("unchecked")
-	public static <T> T xml2Obj(String data, boolean isUseCDATA, Class<?> clazz) {
+	public static <T> T parser(String data, boolean isUseCDATA, Class<?> clazz) {
 		if (isNullOrEmpty(data)) {
 			return null;
 		}

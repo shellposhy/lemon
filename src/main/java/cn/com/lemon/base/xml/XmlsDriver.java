@@ -8,6 +8,15 @@ import com.thoughtworks.xstream.io.xml.PrettyPrintWriter;
 import com.thoughtworks.xstream.io.xml.XmlFriendlyNameCoder;
 import com.thoughtworks.xstream.io.xml.XppDriver;
 
+/**
+ * XML Pull Parser
+ * <p>
+ * when use CDATA,set the {@code Boolean} for true
+ * 
+ * @see XppDriver
+ * @author shellpo shih
+ * @version 1.0
+ */
 public class XmlsDriver extends XppDriver {
 
 	private boolean isUseCDATA = false;
