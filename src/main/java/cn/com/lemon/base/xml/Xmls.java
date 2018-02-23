@@ -47,6 +47,8 @@ public final class Xmls {
 	 *            {@code Object} the data
 	 * @param isUseCDATA
 	 *            is use CDATA
+	 * @param isContainHeader
+	 *            is contail xml header
 	 * @param clazz
 	 * @return {@link String} the xml data
 	 */

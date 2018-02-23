@@ -1,4 +1,4 @@
-package cn.com.lemon.framework.model.fupin.base;
+package cn.com.lemon.framework.model.cmcc.header;
 
 import java.io.Serializable;
 

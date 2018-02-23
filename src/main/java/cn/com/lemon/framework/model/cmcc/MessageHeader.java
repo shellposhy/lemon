@@ -1,15 +1,21 @@
-package cn.com.lemon.framework.model.fupin;
+package cn.com.lemon.framework.model.cmcc;
 
 import java.io.Serializable;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 
-import cn.com.lemon.framework.model.fupin.base.BIPType;
-import cn.com.lemon.framework.model.fupin.base.Response;
-import cn.com.lemon.framework.model.fupin.base.RoutingInfo;
-import cn.com.lemon.framework.model.fupin.base.SNReserve;
-import cn.com.lemon.framework.model.fupin.base.TransInfo;
+import cn.com.lemon.framework.model.cmcc.header.BIPType;
+import cn.com.lemon.framework.model.cmcc.header.Response;
+import cn.com.lemon.framework.model.cmcc.header.RoutingInfo;
+import cn.com.lemon.framework.model.cmcc.header.SNReserve;
+import cn.com.lemon.framework.model.cmcc.header.TransInfo;
 
+/**
+ * Message header.
+ * 
+ * @author shellpo shih
+ * @version 1.0
+ */
 @XStreamAlias("InterBOSS")
 public class MessageHeader implements Serializable {
 	private static final long serialVersionUID = 1L;
