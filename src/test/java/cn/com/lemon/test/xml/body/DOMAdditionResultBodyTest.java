@@ -30,7 +30,7 @@ public class DOMAdditionResultBodyTest {
 		List<DomFailInfo> failList = new ArrayList<DomFailInfo>();
 		failList.add(failInfo);
 
-		DomAdditionResultBody additionResultBody  = new DomAdditionResultBody();
+		DomAdditionResultBody additionResultBody = new DomAdditionResultBody();
 		additionResultBody.setTransIDO("SN10011222");
 		additionResultBody.setStatus("01");
 		additionResultBody.setOperSeq("320101198501247895");
@@ -45,6 +45,7 @@ public class DOMAdditionResultBodyTest {
 		body.setSvcCont(svcCont);
 
 		System.out.println(Xmls.generator(body, true, true, MessageBody.class));
+		Xmls.generator(body, "C:\\Users\\Administrator\\Desktop\\body.xml", true, true, MessageBody.class);
 
 	}
 

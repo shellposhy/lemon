@@ -1,5 +1,11 @@
 package cn.com.lemon.base.xml;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import static cn.com.lemon.base.Preasserts.checkArgument;
@@ -62,6 +68,56 @@ public final class Xmls {
 	}
 
 	/**
+	 * Create XML data from Java Object
+	 * 
+	 * @param data
+	 *            {@code Object} the data
+	 * @param xmlFilePath
+	 *            write date to xml file
+	 * @param isUseCDATA
+	 *            is use CDATA
+	 * @param isContainHeader
+	 *            is contail xml header
+	 * @param clazz
+	 * @return {@link String} the xml data
+	 */
+	public static boolean generator(Object data, String xmlFilePath, boolean isUseCDATA, boolean isContainHeader,
+			Class<?> clazz) {
+		if (null == data)
+			return false;
+		XStream xstream = isUseCDATA ? newInstance("TRUE") : newInstance();
+		xstream.processAnnotations(clazz);
+		xstream.autodetectAnnotations(true);
+		String content = isContainHeader ? DEFAULT_XML_HEADER + xstream.toXML(data) : xstream.toXML(data);
+		File file = new File(xmlFilePath);
+		FileOutputStream out = null;
+		BufferedWriter writer = null;
+		try {
+			if (!file.exists() && !file.isFile())
+				file.createNewFile();
+			out = new FileOutputStream(file);
+			writer = new BufferedWriter(new OutputStreamWriter(out));
+			writer.write(content);
+			return true;
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+			return false;
+		} catch (IOException e) {
+			e.printStackTrace();
+			return false;
+		} finally {
+			if (writer != null) {
+				try {
+					writer.close();
+					out.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+
+	/**
 	 * Parser XML data to Java Object
 	 * 
 	 * @param data
@@ -82,4 +138,5 @@ public final class Xmls {
 		}
 		return (T) xstream.fromXML(data);
 	}
+
 }
