@@ -10,7 +10,7 @@ import cn.com.lemon.framework.model.cmcc.header.Routing;
 import cn.com.lemon.framework.model.cmcc.header.RoutingInfo;
 import cn.com.lemon.framework.model.cmcc.header.TransInfo;
 
-public class XmlHeaderTest {
+public class HeaderTest {
 
 	@Before
 	public void setUp() throws Exception {

@@ -12,7 +12,7 @@ import cn.com.lemon.framework.model.cmcc.body.DomFailInfo;
 import cn.com.lemon.framework.model.cmcc.body.DomSuccInfo;
 import cn.com.lemon.framework.model.cmcc.body.DomUserResultBody;
 
-public class XmlsUserResultBodyTest {
+public class DOMUserResultBodyTest {
 
 	@Before
 	public void setUp() throws Exception {

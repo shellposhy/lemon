@@ -12,7 +12,7 @@ import cn.com.lemon.framework.model.cmcc.body.DomAdditionResultBody;
 import cn.com.lemon.framework.model.cmcc.body.DomFailInfo;
 import cn.com.lemon.framework.model.cmcc.body.DomSuccInfo;
 
-public class XmlsAdditionResultBodyTest {
+public class DOMAdditionResultBodyTest {
 
 	@Before
 	public void setUp() throws Exception {
