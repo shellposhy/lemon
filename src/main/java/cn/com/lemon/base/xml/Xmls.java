@@ -50,13 +50,13 @@ public final class Xmls {
 	 * @param clazz
 	 * @return {@link String} the xml data
 	 */
-	public static String generator(Object data, boolean isUseCDATA, Class<?> clazz) {
+	public static String generator(Object data, boolean isUseCDATA, boolean isContainHeader, Class<?> clazz) {
 		if (null == data)
 			return null;
 		XStream xstream = isUseCDATA ? newInstance("TRUE") : newInstance();
 		xstream.processAnnotations(clazz);
 		xstream.autodetectAnnotations(true);
-		return DEFAULT_XML_HEADER + xstream.toXML(data);
+		return isContainHeader ? DEFAULT_XML_HEADER + xstream.toXML(data) : xstream.toXML(data);
 	}
 
 	/**
