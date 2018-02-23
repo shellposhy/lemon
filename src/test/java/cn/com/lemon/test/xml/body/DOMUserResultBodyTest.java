@@ -41,6 +41,11 @@ public class DOMUserResultBodyTest {
 
 		String svcCont = DomUserResultBody.generator(userResultBody, false, true);
 
+		// xml to javabean
+		DomUserResultBody newbody = Xmls.parser(svcCont, false, DomUserResultBody.class);
+		System.out.println(newbody.getTransIDO());
+		System.out.println();
+
 		MessageBody body = new MessageBody();
 		body.setSvcCont(svcCont);
 
