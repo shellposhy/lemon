@@ -68,7 +68,7 @@ public final class Xmls {
 	}
 
 	/**
-	 * Create XML data from Java Object
+	 * Create XML data from Java Object and write the XML data to files
 	 * 
 	 * @param data
 	 *            {@code Object} the data
@@ -83,12 +83,8 @@ public final class Xmls {
 	 */
 	public static boolean generator(Object data, String xmlFilePath, boolean isUseCDATA, boolean isContainHeader,
 			Class<?> clazz) {
-		if (null == data)
+		if (null == data || isNullOrEmpty(xmlFilePath))
 			return false;
-		XStream xstream = isUseCDATA ? newInstance("TRUE") : newInstance();
-		xstream.processAnnotations(clazz);
-		xstream.autodetectAnnotations(true);
-		String content = isContainHeader ? DEFAULT_XML_HEADER + xstream.toXML(data) : xstream.toXML(data);
 		File file = new File(xmlFilePath);
 		FileOutputStream out = null;
 		BufferedWriter writer = null;
@@ -97,7 +93,7 @@ public final class Xmls {
 				file.createNewFile();
 			out = new FileOutputStream(file);
 			writer = new BufferedWriter(new OutputStreamWriter(out));
-			writer.write(content);
+			writer.write(generator(data, isUseCDATA, isContainHeader, clazz));
 			return true;
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
