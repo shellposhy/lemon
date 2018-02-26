@@ -94,6 +94,7 @@ public final class Xmls {
 			out = new FileOutputStream(file);
 			writer = new BufferedWriter(new OutputStreamWriter(out));
 			writer.write(generator(data, isUseCDATA, isContainHeader, clazz));
+			writer.flush();
 			return true;
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
