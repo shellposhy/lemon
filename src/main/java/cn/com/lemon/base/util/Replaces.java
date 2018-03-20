@@ -82,6 +82,8 @@ public final class Replaces {
 								strBuffer.append(line).append(System.getProperty("line.separator"));
 							}
 							reader.close();
+							in.close();
+							fis.close();
 							// write new files
 							PrintWriter writer = new PrintWriter(files[i]);
 							writer.write(strBuffer.toString().toCharArray());

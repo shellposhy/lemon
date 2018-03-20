@@ -1,6 +1,14 @@
 package cn.com.lemon.base;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
 
 import info.monitorenter.cpdetector.io.ASCIIDetector;
 import info.monitorenter.cpdetector.io.ByteOrderMarkDetector;
@@ -10,6 +18,7 @@ import info.monitorenter.cpdetector.io.ParsingDetector;
 import info.monitorenter.cpdetector.io.UnicodeDetector;
 
 import static cn.com.lemon.base.Preasserts.checkNotNull;
+import static cn.com.lemon.base.Strings.isNullOrEmpty;
 
 /**
  * Static utility methods pertaining to {@code Files} primitives.
@@ -19,6 +28,8 @@ import static cn.com.lemon.base.Preasserts.checkNotNull;
  * @version 1.0
  */
 public final class Files {
+
+	private static final String DEFAULT_ENCODING = "utf-8";
 
 	private Files() {
 	}
@@ -87,5 +98,62 @@ public final class Files {
 		if (file.exists() && file.isFile())
 			return encode(file);
 		return null;
+	}
+
+	/**
+	 * File coding converter based on cpdetector test file coding.
+	 * <p>
+	 * If the file conversion is encoded as empty, the default is encoded in
+	 * utf-8.<br>
+	 * You can encode a file for a single file or directory.
+	 * 
+	 * @param path
+	 *            {@code String} the file directory or the file path
+	 * @param {@code String} the define file encoding,default {@code Charset}
+	 *            utf-8
+	 * @return
+	 */
+	public static void transcode(String filePath, String encode) {
+		checkNotNull(filePath, "The file path or directory is not null");
+		encode = isNullOrEmpty(encode) ? DEFAULT_ENCODING : encode;
+		File fileOrDirectory = new File(filePath);
+		if (fileOrDirectory.isFile() || fileOrDirectory.isDirectory()) {
+			File[] files = fileOrDirectory.listFiles();
+			if (null == files)
+				return;
+			for (int i = 0; i < files.length; i++) {
+				if (files[i].isDirectory()) {
+					transcode(files[i].getAbsolutePath(), encode);
+				} else {
+					String oldEncode = encode(files[i]);
+					if (null != oldEncode && !oldEncode.equals(encode)) {
+						FileInputStream fis = null;
+						InputStreamReader in = null;
+						try {
+							fis = new FileInputStream(files[i].getAbsolutePath());
+							in = new InputStreamReader(fis, oldEncode);
+							BufferedReader reader = new BufferedReader(in);
+							StringBuffer strBuffer = new StringBuffer();
+							String line = null;
+							while ((line = reader.readLine()) != null) {
+								strBuffer.append(line).append(System.getProperty("line.separator"));
+							}
+							reader.close();
+							in.close();
+							fis.close();
+							// write new files
+							Writer writer = new BufferedWriter(
+									new OutputStreamWriter(new FileOutputStream(files[i]), encode));
+							writer.write(strBuffer.toString().toCharArray());
+							writer.flush();
+							writer.close();
+						} catch (IOException e) {
+						}
+					}
+				}
+			}
+		} else {
+			checkNotNull(null, "The given file path is not directory or real file path!");
+		}
 	}
 }
