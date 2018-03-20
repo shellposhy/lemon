@@ -3,6 +3,7 @@ package cn.com.lemon.base;
 import java.io.File;
 
 import info.monitorenter.cpdetector.io.ASCIIDetector;
+import info.monitorenter.cpdetector.io.ByteOrderMarkDetector;
 import info.monitorenter.cpdetector.io.CodepageDetectorProxy;
 import info.monitorenter.cpdetector.io.JChardetFacade;
 import info.monitorenter.cpdetector.io.ParsingDetector;
@@ -43,9 +44,22 @@ public final class Files {
 	 */
 	public static String encode(File file) {
 		CodepageDetectorProxy detector = CodepageDetectorProxy.getInstance();
+		// ParsingDetector can be used to check the encoding of a file or
+		// character stream, such as HTML, XML, or a character stream, and the
+		// parameters in the constructor are used to indicate whether the
+		// details of the detection process are displayed, or false.
 		detector.add(new ParsingDetector(false));
+		detector.add(new ByteOrderMarkDetector());
+		// The JChardetFacade encapsulates JChardet, which is provided by the
+		// Mozilla organization, which can code for most files.As a result, the
+		// detector can meet the requirements of most projects. If you are not
+		// comfortable, you can add a few more detectors, such as ASCIIDetector,
+		// UnicodeDetector, etc.
 		detector.add(JChardetFacade.getInstance());
+		// ASCIIDetector is used for the determination of ASCII encoding.
 		detector.add(ASCIIDetector.getInstance());
+		// UnicodeDetector is used for the determination of Unicode family
+		// encoding.
 		detector.add(UnicodeDetector.getInstance());
 		java.nio.charset.Charset charset = null;
 		try {
