@@ -13,7 +13,7 @@ public class ReplacesTest {
 
 	@Test
 	public void testFileStringStringString() {
-		Replaces.file("C:\\Users\\Administrator\\Desktop\\bxy", "zgshfp.org.cn", "zgshfp.com.cn");
+		Replaces.file("F:\\project\\release\\px1017", "shfp1017.org.cn", "px.shfp1017.org.cn");
 	}
 
 }
