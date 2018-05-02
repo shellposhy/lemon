@@ -33,7 +33,7 @@ public final class Strings {
 	 *         data
 	 * 
 	 */
-	public String blob(Blob blob) {
+	public static String blob(Blob blob) {
 		try {
 			BufferedReader reader = new BufferedReader(new InputStreamReader(blob.getBinaryStream(), "utf-8"));
 			String s = null;
@@ -67,7 +67,7 @@ public final class Strings {
 	 *         data
 	 * 
 	 */
-	public String clob(Clob clob) {
+	public static String clob(Clob clob) {
 		try {
 			BufferedReader reader = new BufferedReader(new InputStreamReader(clob.getAsciiStream(), "utf-8"));
 			String s = null;
