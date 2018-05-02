@@ -2,8 +2,14 @@ package cn.com.lemon.base;
 
 import static cn.com.lemon.base.Preasserts.checkNotNull;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
+import java.sql.Blob;
+import java.sql.Clob;
+import java.sql.SQLException;
 
 /**
  * The <code>StringUtil</code>class is basic string utilities.
@@ -15,6 +21,74 @@ import java.security.MessageDigest;
  */
 public final class Strings {
 	private Strings() {
+	}
+
+	/**
+	 * Retrieves the <code>Blob</code> value designated by this
+	 * <code>Blob</code> object as an string character.
+	 *
+	 * @param blob
+	 *            <code>Blob</code> the database blob data
+	 * @return a <code>String</code> object containing the <code>Blob</code>
+	 *         data
+	 * 
+	 */
+	public String blob(Blob blob) {
+		try {
+			BufferedReader reader = new BufferedReader(new InputStreamReader(blob.getBinaryStream(), "utf-8"));
+			String s = null;
+			StringBuilder sb = new StringBuilder();
+			while ((s = reader.readLine()) != null) {
+				sb.append(s);
+			}
+			if (reader != null) {
+				reader.close();
+			}
+			return sb.toString();
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+			return null;
+		} catch (IOException e) {
+			e.printStackTrace();
+			return null;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	/**
+	 * Retrieves the <code>Clob</code> value designated by this
+	 * <code>Clob</code> object as an string character.
+	 *
+	 * @param clob
+	 *            <code>Clob</code> the database blob data
+	 * @return a <code>String</code> object containing the <code>Clob</code>
+	 *         data
+	 * 
+	 */
+	public String clob(Clob clob) {
+		try {
+			BufferedReader reader = new BufferedReader(new InputStreamReader(clob.getAsciiStream(), "utf-8"));
+			String s = null;
+			StringBuilder sb = new StringBuilder();
+			while ((s = reader.readLine()) != null) {
+				sb.append(s);
+			}
+			if (reader != null) {
+				reader.close();
+			}
+			return sb.toString();
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+			return null;
+		} catch (IOException e) {
+			e.printStackTrace();
+			return null;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 
 	/**
