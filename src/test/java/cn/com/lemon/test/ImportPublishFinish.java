@@ -5,11 +5,14 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import cn.com.lemon.base.DateUtil;
 import cn.com.lemon.base.poi.Excels;
+import cn.com.lemon.base.util.Jsons;
 import cn.com.lemon.common.connection.Oracles;
 
 public class ImportPublishFinish {
@@ -22,7 +25,7 @@ public class ImportPublishFinish {
 	public static void importData() throws SQLException, IOException {
 		Connection connection = Oracles.newInstance();
 		List<String[]> datas = Excels.read(new File("C:\\Users\\Administrator\\Desktop\\11.xlsx"), true);
-		String sql = "INSERT INTO MY_PUBLISH_STATUS (id,status,fail) VALUES(?,?,?)";
+		String sql = "INSERT INTO MY_PUBLISH_STATUS_BACK (id,status,fail,txdate) VALUES(?,?,?,?)";
 		PreparedStatement ps = connection.prepareStatement(sql);
 		Map<Integer, Account> result = new HashMap<Integer, Account>();
 		int z = 0;
@@ -30,6 +33,7 @@ public class ImportPublishFinish {
 		int f = 0;
 		int o = 0;
 		for (String[] data : datas) {
+			System.out.println(Jsons.json(data));
 			if (!result.containsKey(Integer.valueOf(data[0]))) {
 				Account account = new Account();
 				account.setId(Integer.valueOf(data[0]));
@@ -55,6 +59,11 @@ public class ImportPublishFinish {
 				} else {
 					account.setFail(0);
 				}
+				if (data.length == 4) {
+					Date date=DateUtil.parse(data[3], "yyyy-MM-dd");
+					System.out.println(data[3]);
+					account.setTxdate(date);
+				}
 				result.put(Integer.valueOf(data[0]), account);
 			}
 		}
@@ -70,7 +79,8 @@ public class ImportPublishFinish {
 			ps.setInt(1, entry.getKey());
 			ps.setInt(2, entry.getValue().getStatus());
 			ps.setInt(3, entry.getValue().getFail());
-			// ps.executeQuery();
+			ps.setDate(4,new java.sql.Date(entry.getValue().getTxdate().getTime()) );
+			 ps.executeQuery();
 		}
 	}
 }
@@ -79,6 +89,7 @@ class Account {
 	private Integer id;
 	private Integer status;
 	private Integer fail;
+	private Date txdate;
 
 	public Integer getId() {
 		return id;
@@ -102,6 +113,14 @@ class Account {
 
 	public void setFail(Integer fail) {
 		this.fail = fail;
+	}
+
+	public Date getTxdate() {
+		return txdate;
+	}
+
+	public void setTxdate(Date txdate) {
+		this.txdate = txdate;
 	}
 
 }
