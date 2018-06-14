@@ -9,9 +9,12 @@ import java.util.Date;
 import java.util.List;
 
 import cn.com.lemon.base.poi.Excels;
+import cn.com.lemon.base.util.Jsons;
 import cn.com.lemon.common.connection.Oracles;
 
 public class ImportPublishFinish {
+
+	private static final String PATH = "https://res.shfp1017.org.cn/upload/djpt/zmfpr/";
 
 	public static void main(String[] args) throws SQLException, IOException {
 		ImportPublishFinish.importData();
@@ -21,23 +24,29 @@ public class ImportPublishFinish {
 	public static void importData() throws SQLException, IOException {
 		Connection connection = Oracles.newInstance();
 		List<String[]> datas = Excels.read(new File("C:\\Users\\Administrator\\Desktop\\11.xlsx"), true);
-		String sql = "INSERT INTO my_publish_setnum (ID,DATESTR,SETNUM) VALUES(?,?,?)";
+		String sql = "INSERT INTO shfpsubject.vote_candidate (id,candidate_id,candidate_name,candidate_type,candidate_img,sheng,shi,xian,xiang,cun,candidate_addr,title,url)"
+				+ " VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)";
 		PreparedStatement ps = connection.prepareStatement(sql);
-		String dateStr = datas.get(0)[1];
 		int tmp = 1;
 		for (String[] data : datas) {
-			ps.setInt(1, Integer.valueOf(data[0]));
-			ps.setString(2, data[1]);
-			if (dateStr.equals(data[1])) {
-				ps.setString(3, data[1] + "-" + tmp);
-				tmp++;
-			} else {
-				tmp = 1;
-				dateStr = data[1];
-				ps.setString(3, data[1] + "-" + tmp);
-				tmp++;
-			}
+			System.out.println(Jsons.json(data));
+			ps.setInt(1, tmp);
+			ps.setString(2, data[0].length() == 1 ? "00" + data[0] : data[0].length() == 2 ? "0" + data[0] : data[0]);
+			ps.setString(3, data[1].trim());
+			String type = data[2].trim();
+			ps.setInt(4, type.equals("第一书记") ? 0
+					: type.equals("扶贫干部") ? 1 : type.equals("贫困户") ? 2 : type.equals("爱心人士") ? 3 : 4);
+			ps.setString(5, PATH + data[5].trim());
+			ps.setString(6, data[3].trim());
+			ps.setString(7, data[4].trim());
+			ps.setString(8, "");
+			ps.setString(9, "");
+			ps.setString(10, "");
+			ps.setString(11, data[3].trim() + data[4].trim());
+			ps.setString(12, data[6].trim());
+			ps.setString(13, data[7].trim());
 			ps.executeQuery();
+			tmp++;
 		}
 	}
 }
