@@ -14,11 +14,10 @@ import cn.com.lemon.common.connection.Oracles;
 
 public class ImportPublishFinish {
 
-	private static final String PATH = "https://res.shfp1017.org.cn/upload/djpt/zmfpr/";
+	private static final String PATH = "https://res.zgshfp.com.cn/upload/djpt/zmfpr/";
 
 	public static void main(String[] args) throws SQLException, IOException {
 		ImportPublishFinish.importData();
-
 	}
 
 	public static void importData() throws SQLException, IOException {
@@ -27,7 +26,7 @@ public class ImportPublishFinish {
 		String sql = "INSERT INTO shfpsubject.vote_candidate (id,candidate_id,candidate_name,candidate_type,candidate_img,sheng,shi,xian,xiang,cun,candidate_addr,title,url)"
 				+ " VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)";
 		PreparedStatement ps = connection.prepareStatement(sql);
-		int tmp = 1;
+		int tmp = 171;
 		for (String[] data : datas) {
 			System.out.println(Jsons.json(data));
 			ps.setInt(1, tmp);
