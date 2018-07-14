@@ -10,6 +10,8 @@ import java.security.MessageDigest;
 import java.sql.Blob;
 import java.sql.Clob;
 import java.sql.SQLException;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * The <code>StringUtil</code>class is basic string utilities.
@@ -21,6 +23,56 @@ import java.sql.SQLException;
  */
 public final class Strings {
 	private Strings() {
+	}
+
+	/**
+	 * 
+	 * Returns {@code String[} change List to {@code String[]}
+	 * 
+	 * @param array
+	 *            the {@code String} List
+	 * @return {@code String[]}
+	 */
+	public static String[] toArray(List<String> list) {
+		if (null == list || list.size() == 0)
+			return null;
+		String[] target = new String[list.size()];
+		return list.toArray(target);
+	}
+
+	/**
+	 * 
+	 * Returns {@code List} change array to {@code List}
+	 * 
+	 * @param array
+	 *            the {@code String} array
+	 * @return {@code List}
+	 */
+	public static List<String> toList(String[] array) {
+		if (null == array || array.length == 0)
+			return null;
+		return Arrays.asList(array);
+	}
+
+	/**
+	 * Returns {@code true} if {@code target} is present as an element anywhere
+	 * in {@code array}.
+	 *
+	 * @param array
+	 *            an array of {@code String} values, possibly empty
+	 * @param target
+	 *            a primitive {@code String} value
+	 * @return {@code true} if {@code array[i] == target} for some value of
+	 *         {@code
+	 *     i}
+	 */
+	public static boolean contains(String[] array, String target) {
+		for (String value : array) {
+			if (value == target) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	/**
