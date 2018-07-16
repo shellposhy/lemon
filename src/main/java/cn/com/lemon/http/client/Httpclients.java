@@ -1,12 +1,12 @@
 package cn.com.lemon.http.client;
 
+import java.io.Closeable;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.http.HttpEntity;
+import org.apache.http.HttpConnection;
 import org.apache.http.HttpHost;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -21,10 +21,18 @@ import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 import org.apache.http.message.BasicNameValuePair;
-import org.apache.http.util.EntityUtils;
 
-import cn.com.lemon.base.util.Jsons;
-
+/**
+ * Static utility methods pertaining to {@code Httpclients} primitives, base on
+ * {@link HttpClient} tools
+ * <p>
+ * {@code Httpclients} provide the base {@link CloseableHttpClient},the use for
+ * {@link HttpConnection},also privide the {@link HttpResponse} data processing.
+ *
+ * @see HttpClient-tools-4.5.6
+ * @author shellpo shih
+ * @version 1.0
+ */
 public class Httpclients {
 
 	private PoolingHttpClientConnectionManager connectionManager = null;
@@ -33,10 +41,29 @@ public class Httpclients {
 	private static int MAXCONNECTION = 10;
 	private static int DEFAULTMAXCONNECTION = 5;
 
+	/**
+	 * Static the initialize method
+	 * <p>
+	 * the initialization parameter
+	 * 
+	 * @param domain
+	 *            ip address or domain name
+	 * @param port
+	 *            the {@code int} the web service port number
+	 * @return {@link Httpclients}
+	 */
 	public static Httpclients init(String domain, int port) {
 		return new Httpclients(domain, port);
 	}
 
+	/**
+	 * private constructor
+	 * 
+	 * @param domain
+	 *            ip address or domain name
+	 * @param port
+	 *            the {@code int} the web service port number
+	 */
 	private Httpclients(String domain, int port) {
 		requestConfig = RequestConfig.custom().setSocketTimeout(5000).setConnectTimeout(5000)
 				.setConnectionRequestTimeout(5000).build();
@@ -49,66 +76,75 @@ public class Httpclients {
 		httpBuilder.setConnectionManager(connectionManager);
 	}
 
+	/**
+	 * Base implementation of {@link HttpClient} that also implements
+	 * {@link Closeable}
+	 * 
+	 * @since {@link HttpClient} 4.3
+	 */
 	public CloseableHttpClient connection() {
 		CloseableHttpClient httpClient = httpBuilder.build();
 		return httpClient;
 	}
 
-	public HttpUriRequest request(Map<String, String> parameter, String url, EHttpMethod method) {
-		List<NameValuePair> params = new ArrayList<NameValuePair>();
-		for (Map.Entry<String, String> e : parameter.entrySet()) {
-			NameValuePair pair = new BasicNameValuePair(e.getKey(), e.getValue());
-			params.add(pair);
-		}
-		NameValuePair[] valuePairs = params.toArray(new BasicNameValuePair[params.size()]);
-		HttpUriRequest request = null;
-		switch (method) {
-		case GET:
-			request = RequestBuilder.get().setUri(url).addParameters(valuePairs).setConfig(requestConfig).build();
-			break;
-		case POST:
-			request = RequestBuilder.post().setUri(url).addParameters(valuePairs).setConfig(requestConfig).build();
-			break;
-		case DELETE:
-			request = RequestBuilder.delete().setUri(url).addParameters(valuePairs).setConfig(requestConfig).build();
-			break;
-		case HEAD:
-			request = RequestBuilder.head().setUri(url).addParameters(valuePairs).setConfig(requestConfig).build();
-			break;
-		case OPTIONS:
-			request = RequestBuilder.options().setUri(url).addParameters(valuePairs).setConfig(requestConfig).build();
-			break;
-		case PUT:
-			request = RequestBuilder.put().setUri(url).addParameters(valuePairs).setConfig(requestConfig).build();
-			break;
-		case TRACE:
-			request = RequestBuilder.trace().setUri(url).addParameters(valuePairs).setConfig(requestConfig).build();
-			break;
-		default:
-			request = RequestBuilder.get().setUri(url).addParameters(valuePairs).setConfig(requestConfig).build();
-			break;
-		}
-		return request;
+	/**
+	 * Submit requests based on post
+	 * 
+	 * @param param
+	 *            the base parameter
+	 * @param url
+	 *            the request interface
+	 * @return {@link HttpUriRequest}
+	 */
+	public HttpUriRequest post(Map<String, String> param, String url) {
+		if (null != param && param.size() > 0)
+			return RequestBuilder.post().setUri(url).addParameters(param(param)).setConfig(requestConfig).build();
+		return RequestBuilder.post().setUri(url).setConfig(requestConfig).build();
 	}
 
-	public static void main(String[] args) throws ClientProtocolException, IOException {
-		Httpclients httpclients = Httpclients.init("baidu.com", 80);
-		Map<String, String> map = new HashMap<String, String>();
-		map.put("username", "朱天庆");
-		map.put("password", "921024cxq");
-		map.put("token", "1f1176b726665bf87c9e0dd9600ef1a2");
-		map.put("account_type", "1");
-		
-		Map<String, String> map1 = new HashMap<String, String>();
-		map1.put("header", Jsons.json(map));
-		
-		HttpClient client = httpclients.connection();
-		
-		HttpUriRequest post =httpclients.request(map1, "https://api.baidu.com/json/tongji/v1/ReportService/getData", EHttpMethod.POST);
-		HttpResponse response=client.execute(post);
-		HttpEntity entity = response.getEntity();  
-        String message = EntityUtils.toString(entity, "utf-8");  
-        System.out.println(message);  
+	/**
+	 * Submit requests based on get
+	 * 
+	 * @param param
+	 *            the base parameter
+	 * @param url
+	 *            the request interface
+	 * @return {@link HttpUriRequest}
+	 */
+	public HttpUriRequest get(Map<String, String> param, String url) {
+		if (null != param && param.size() > 0)
+			return RequestBuilder.get().setUri(url).addParameters(param(param)).setConfig(requestConfig).build();
+		return RequestBuilder.get().setUri(url).setConfig(requestConfig).build();
 	}
 
+	/**
+	 * Execute the {@code HttpUriRequest} and return {@code HttpResponse}
+	 * 
+	 * @param request
+	 *            the {@code HttpUriRequest}
+	 * @return {@code HttpResponse}
+	 */
+	public HttpResponse execute(HttpUriRequest request) {
+		try {
+			return httpBuilder.build().execute(request);
+		} catch (ClientProtocolException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	/* ==================private tools========================== */
+	private NameValuePair[] param(Map<String, String> param) {
+		if (null != param && param.size() > 0) {
+			List<NameValuePair> params = new ArrayList<NameValuePair>();
+			for (Map.Entry<String, String> e : param.entrySet()) {
+				NameValuePair pair = new BasicNameValuePair(e.getKey(), e.getValue());
+				params.add(pair);
+			}
+			return params.toArray(new BasicNameValuePair[params.size()]);
+		}
+		return null;
+	}
 }
