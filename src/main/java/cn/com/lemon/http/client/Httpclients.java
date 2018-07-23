@@ -2,25 +2,33 @@ package cn.com.lemon.http.client;
 
 import java.io.Closeable;
 import java.io.IOException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.http.HttpConnection;
+import org.apache.http.HttpEntity;
 import org.apache.http.HttpHost;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.config.RequestConfig;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.client.methods.RequestBuilder;
 import org.apache.http.conn.routing.HttpRoute;
+import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.protocol.HTTP;
+import org.apache.http.util.EntityUtils;
 
 /**
  * Static utility methods pertaining to {@code Httpclients} primitives, base on
@@ -34,6 +42,9 @@ import org.apache.http.message.BasicNameValuePair;
  * @version 1.0
  */
 public class Httpclients {
+
+	private static final String APPLICATION_JSON = "application/json";
+	private static final String TEXT_JSON = "text/json";
 
 	private PoolingHttpClientConnectionManager connectionManager = null;
 	private HttpClientBuilder httpBuilder = null;
@@ -115,6 +126,33 @@ public class Httpclients {
 		if (null != param && param.size() > 0)
 			return RequestBuilder.get().setUri(url).addParameters(param(param)).setConfig(requestConfig).build();
 		return RequestBuilder.get().setUri(url).setConfig(requestConfig).build();
+	}
+
+	/**
+	 * Submit {@code Json} requests based on post
+	 * 
+	 * @param json
+	 *            the json {@code String}
+	 * @param url
+	 *            the request interface
+	 * @return {@code String}
+	 */
+	public String post(String url, String json) {
+		HttpPost httpPost = new HttpPost(url);
+		httpPost.setHeader(HTTP.CONTENT_TYPE, APPLICATION_JSON);
+		try {
+			// JSON is encoded in utf-8 to transfer Chinese
+			json = URLEncoder.encode(json, StandardCharsets.UTF_8.name());
+			StringEntity stringEntity = new StringEntity(json);
+			stringEntity.setContentType(TEXT_JSON);
+			httpPost.setEntity(stringEntity);
+			CloseableHttpResponse response = connection().execute(httpPost);
+			HttpEntity entity = response.getEntity();
+			return EntityUtils.toString(entity, "UTF-8");
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 
 	/**
