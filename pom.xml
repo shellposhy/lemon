@@ -14,6 +14,7 @@
 		<spring4.version>4.1.8.RELEASE</spring4.version>
 		<jackson.version>2.9.4</jackson.version>
 		<xstream_version>1.4.9</xstream_version>
+		<httpclient_version>4.5.6</httpclient_version>
 	</properties>
 
 	<!-- dependencies -->
@@ -63,7 +64,12 @@
 		<dependency>
 			<groupId>org.apache.httpcomponents</groupId>
 			<artifactId>httpclient</artifactId>
-			<version>4.5.6</version>
+			<version>${httpclient_version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>fluent-hc</artifactId>
+			<version>${httpclient_version}</version>
 		</dependency>
 
 		<!-- xstream -->

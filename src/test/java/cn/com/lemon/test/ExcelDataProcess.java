@@ -14,7 +14,7 @@ public class ExcelDataProcess {
 	}
 
 	public static void process() {
-		List<String[]> qiu = Excels.read(new File("C:\\Users\\Administrator\\Desktop\\qi.xls"), true);
+		List<String[]> qiu = Excels.read(new File("C:\\Users\\Administrator\\Desktop\\qi.xlsx"), true);
 		List<String[]> shi = Excels.read(new File("C:\\Users\\Administrator\\Desktop\\sh.xlsx"), true);
 
 		int count=0;
