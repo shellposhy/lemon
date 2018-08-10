@@ -13,6 +13,7 @@ import org.apache.http.HttpEntity;
 import org.apache.http.HttpHost;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
+import org.apache.http.ParseException;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.config.RequestConfig;
@@ -169,6 +170,30 @@ public class Httpclients {
 			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
+		}
+		return null;
+	}
+
+	/**
+	 * No parameters GET mode requests that return data in Json format or string
+	 * format.
+	 * 
+	 * @param url
+	 *            Http request
+	 * @return {@code String}
+	 */
+	public String get(String url) {
+		HttpEntity entity = execute(get(null, url)).getEntity();
+		if (null != entity) {
+			try {
+				return EntityUtils.toString(entity, StandardCharsets.UTF_8.name());
+			} catch (ParseException e) {
+				e.printStackTrace();
+				return null;
+			} catch (IOException e) {
+				e.printStackTrace();
+				return null;
+			}
 		}
 		return null;
 	}
