@@ -5,14 +5,13 @@ import java.util.List;
 
 import cn.com.lemon.base.Strings;
 import cn.com.lemon.base.poi.Excels;
-import cn.com.lemon.util.security.ContentEncryptUtil;
 
 public class ExcelDataProcess {
 
 	public static void main(String[] args) {
-		// ExcelDataProcess.process();
-		System.out.println(ContentEncryptUtil.encrypt("ContentEncryptUtil", "shfpback"));
-		System.out.println(ContentEncryptUtil.encrypt("105025", "shfpback"));
+		 ExcelDataProcess.process();
+		//System.out.println(ContentEncryptUtil.encrypt("ContentEncryptUtil", "shfpback"));
+		//System.out.println(ContentEncryptUtil.encrypt("105025", "shfpback"));
 	}
 
 	public static void process() {
