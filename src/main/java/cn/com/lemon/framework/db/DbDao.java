@@ -1,14 +1,10 @@
 package cn.com.lemon.framework.db;
 
-import static cn.com.lemon.base.Strings.blob;
-import static cn.com.lemon.base.Strings.clob;
-
+import java.lang.reflect.Field;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
-import java.sql.Types;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import javax.sql.DataSource;
@@ -17,6 +13,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowCallbackHandler;
+
+import cn.com.lemon.annotation.Column;
+import cn.com.lemon.annotation.ID;
+
+import static cn.com.lemon.base.Preasserts.checkArgument;
+import static cn.com.lemon.base.Strings.isNullOrEmpty;
+import static cn.com.lemon.framework.db.ResultSets.data;
 
 /**
  * Base on Spring JDBC template
@@ -31,10 +34,31 @@ import org.springframework.jdbc.core.RowCallbackHandler;
  */
 public class DbDao {
 	private final Logger LOG = LoggerFactory.getLogger(DbDao.class.getName());
+	private AnnotationHelper helper = AnnotationHelper.getInstance();
 	private JdbcTemplate jdbcTemplate;
 
 	public <T> List<T> list(String sql, Class<T> requiredType) {
-		
+		checkArgument(!isNullOrEmpty(sql));
+		List<ResultSet> list = list1(sql);
+		if (null != list && list.size() > 0) {
+			List<T> result = new ArrayList<T>();
+			for (ResultSet resultSet : list) {
+				try {
+					T t = requiredType.newInstance();
+					/* data logic processing */
+					if (null != resultSet) {
+						singleData(t, resultSet);
+						result.add(t);
+					}
+				} catch (InstantiationException e) {
+					LOG.error("[" + requiredType + "]" + "java.lang.Class#newInstance() error!");
+					e.printStackTrace();
+				} catch (IllegalAccessException e) {
+					LOG.error("[" + requiredType + "]" + "java.lang.Class#newInstance() error!");
+					e.printStackTrace();
+				}
+			}
+		}
 		return null;
 	}
 
@@ -50,9 +74,30 @@ public class DbDao {
 		final List<BaseModel> result = new ArrayList<BaseModel>();
 		jdbcTemplate.query(sql, new RowCallbackHandler() {
 			public void processRow(ResultSet rs) throws SQLException {
-				result.add(singleData(rs));
+				result.add(data(rs));
 				while (rs.next()) {
-					result.add(singleData(rs));
+					result.add(data(rs));
+				}
+			}
+		});
+		return result;
+	}
+
+	/**
+	 * Generic list data query
+	 * 
+	 * @param sql
+	 *            standard SQL language
+	 * @return {@code List}
+	 */
+	public List<ResultSet> list1(String sql) {
+		LOG.debug("[" + sql + "] list!");
+		final List<ResultSet> result = new ArrayList<ResultSet>();
+		jdbcTemplate.query(sql, new RowCallbackHandler() {
+			public void processRow(ResultSet rs) throws SQLException {
+				result.add(rs);
+				while (rs.next()) {
+					result.add(rs);
 				}
 			}
 		});
@@ -98,70 +143,82 @@ public class DbDao {
 	}
 
 	/* tools */
-	private BaseModel singleData(ResultSet rs) {
+	private <T> T singleData(T t, ResultSet rs) {
+		checkArgument(null != t && null != rs);
 		try {
-			if (null != rs) {
-				ResultSetMetaData md = rs.getMetaData();
-				if (null != md && md.getColumnCount() > 0) {
-					BaseModel model = new BaseModel();
-					for (int i = 1; i <= md.getColumnCount(); i++) {
-						String label = md.getColumnLabel(i);
-						Object value = null;
-						switch (md.getColumnType(i)) {
-						case Types.INTEGER:
-							value = rs.getInt(i);
-							break;
-						case Types.BIGINT:
-							value = rs.getLong(i);
-							break;
-						case Types.DECIMAL:
-						case Types.NUMERIC:
-							value = rs.getBigDecimal(i);
-							break;
-						case Types.TINYINT:
-						case Types.SMALLINT:
-							value = rs.getShort(i);
-							break;
-						case Types.LONGVARBINARY:
-						case Types.BLOB:
-							value = rs.getBlob(i) == null ? null : blob(rs.getBlob(i));
-							break;
-						case Types.CLOB:
-							value = rs.getClob(i) == null ? null : clob(rs.getClob(i));
-							break;
-						case Types.DATE:
-						case Types.TIME:
-						case Types.TIMESTAMP:
-							value = rs.getDate(i) == null ? null : new Date(rs.getTimestamp(i).getTime());
-							break;
-						case Types.CHAR:
-						case Types.VARCHAR:
-						case Types.LONGNVARCHAR:
-							value = rs.getString(i);
-							break;
-						case Types.DOUBLE:
-							value = rs.getDouble(i);
-							break;
-						case Types.FLOAT:
-						case Types.REAL:
-							value = rs.getFloat(i);
-							break;
-						case Types.BOOLEAN:
-						case Types.BIT:
-							value = rs.getBoolean(i);
-							break;
-						default:
-							value = rs.getString(i);
-							break;
+			ResultSetMetaData md = rs.getMetaData();
+			if (null != md && md.getColumnCount() > 0) {
+				Field[] fields = helper.filed(t.getClass());
+				if (null != fields && fields.length > 0) {
+					List<Field> columnList = new ArrayList<Field>();
+					List<Field> idList = new ArrayList<Field>();
+					// Handle object attribute annotations
+					for (Field field : fields) {
+						if (field.isAnnotationPresent(Column.class)) {
+							columnList.add(field);
+						} else if (field.isAnnotationPresent(ID.class)) {
+							idList.add(field);
 						}
-						model.put(label, value);
 					}
-					return model;
+					// Java object properties are bound to database column data
+					if (columnList.size() > 0 || idList.size() > 0) {
+						// column list
+						if (columnList.size() > 0) {
+							for (Field field : columnList) {
+								// java bean field name
+								String objectFieldName = field.getName();
+								// database column name
+								String columnName = field.getAnnotation(Column.class).value();
+								Object value = ResultSets.data(rs, columnName);
+								if (null != value) {
+									try {
+										helper.setFieldValue(t, objectFieldName, value);
+									} catch (IllegalArgumentException e) {
+										LOG.error("[" + t.getClass().getName() + "] set [" + objectFieldName
+												+ "] error! Becase database table cloumn [" + columnName
+												+ "] not exist or error!");
+										e.printStackTrace();
+									} catch (IllegalAccessException e) {
+										LOG.error("[" + t.getClass().getName() + "] set [" + objectFieldName
+												+ "] error! Becase database table cloumn [" + columnName
+												+ "] not exist or error!");
+										e.printStackTrace();
+									}
+								}
+							}
+						}
+						// id list
+						if (idList.size() > 0) {
+							for (Field field : idList) {
+								// java bean field name
+								String objectFieldName = field.getName();
+								// database column name
+								String columnName = field.getAnnotation(Column.class).value();
+								Object value = ResultSets.data(rs, columnName);
+								if (null != value) {
+									try {
+										helper.setFieldValue(t, objectFieldName, value);
+									} catch (IllegalArgumentException e) {
+										LOG.error("[" + t.getClass().getName() + "] set [" + objectFieldName
+												+ "] error! Becase database table cloumn [" + columnName
+												+ "] not exist or error!");
+										e.printStackTrace();
+									} catch (IllegalAccessException e) {
+										LOG.error("[" + t.getClass().getName() + "] set [" + objectFieldName
+												+ "] error! Becase database table cloumn [" + columnName
+												+ "] not exist or error!");
+										e.printStackTrace();
+									}
+								}
+							}
+						}
+					}
 				}
 			}
 		} catch (SQLException e) {
+			LOG.debug("[ResultSet] Get meta data error!");
 			e.printStackTrace();
 		}
-		return null;
+		return t;
 	}
 }

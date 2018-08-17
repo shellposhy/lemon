@@ -3,7 +3,12 @@ package cn.com.lemon.framework.db;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+
+import cn.com.lemon.annotation.Column;
+import cn.com.lemon.annotation.ID;
 
 /**
  * Custom annotations tools.
@@ -40,8 +45,21 @@ public class AnnotationHelper {
 	 * @return {@code Field[]}
 	 */
 	public <T> Field[] filed(Class<T> requiredType) {
-		Field[] result = requiredType.getDeclaredFields();
-		return result;
+		Field[] fields = requiredType.getDeclaredFields();
+		if (null != fields && fields.length > 0) {
+			List<Field> list = new ArrayList<Field>();
+			for (Field field : fields) {
+				if (field.isAnnotationPresent(Column.class) || field.isAnnotationPresent(ID.class)) {
+					field.setAccessible(true);
+					list.add(field);
+				}
+			}
+			if (list.size() > 0) {
+				Field[] result = new Field[list.size()];
+				return list.toArray(result);
+			}
+		}
+		return null;
 	}
 
 	/**
