@@ -37,18 +37,28 @@ public class DbDao {
 	private AnnotationHelper helper = AnnotationHelper.getInstance();
 	private JdbcTemplate jdbcTemplate;
 
-	public <T> List<T> list(String sql, Class<T> requiredType) {
+	/**
+	 * Generic list data query,
+	 * <p>
+	 * Automatically organize and wrap data objects through annotations.
+	 * 
+	 * @param sql
+	 * @param requiredType
+	 * @return {@link List}
+	 */
+	public <T> List<T> list(String sql, final Class<T> requiredType) {
 		checkArgument(!isNullOrEmpty(sql));
-		List<ResultSet> list = list1(sql);
-		if (null != list && list.size() > 0) {
-			List<T> result = new ArrayList<T>();
-			for (ResultSet resultSet : list) {
+		final List<T> result = new ArrayList<T>();
+		jdbcTemplate.query(sql, new RowCallbackHandler() {
+			public void processRow(ResultSet rs) throws SQLException {
 				try {
-					T t = requiredType.newInstance();
-					/* data logic processing */
-					if (null != resultSet) {
-						singleData(t, resultSet);
-						result.add(t);
+					T first = requiredType.newInstance();
+					singleData(first, rs);
+					result.add(first);
+					while (rs.next()) {
+						T next = requiredType.newInstance();
+						singleData(next, rs);
+						result.add(next);
 					}
 				} catch (InstantiationException e) {
 					LOG.error("[" + requiredType + "]" + "java.lang.Class#newInstance() error!");
@@ -58,8 +68,8 @@ public class DbDao {
 					e.printStackTrace();
 				}
 			}
-		}
-		return null;
+		});
+		return result;
 	}
 
 	/**
