@@ -22,6 +22,7 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.client.methods.RequestBuilder;
 import org.apache.http.conn.routing.HttpRoute;
+import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
@@ -136,16 +137,18 @@ public class Httpclients {
 	 *            the json {@code String}
 	 * @param url
 	 *            the request interface
+	 * @param contentType
 	 * @return {@code String}
 	 */
-	public String post(String url, String json) {
+	public String post(String url, String json, HttpJson contentType) {
 		HttpPost httpPost = new HttpPost(url);
 		httpPost.setHeader(HTTP.CONTENT_TYPE, APPLICATION_JSON);
 		try {
 			// JSON is encoded in utf-8 to transfer Chinese
 			json = URLEncoder.encode(json, StandardCharsets.UTF_8.name());
 			StringEntity stringEntity = new StringEntity(json);
-			stringEntity.setContentType(TEXT_JSON);
+			stringEntity
+					.setContentType(null != contentType && contentType == HttpJson.TEXT ? TEXT_JSON : APPLICATION_JSON);
 			httpPost.setEntity(stringEntity);
 			CloseableHttpResponse response = connection().execute(httpPost);
 			HttpEntity entity = response.getEntity();
@@ -154,6 +157,38 @@ public class Httpclients {
 			e.printStackTrace();
 			return null;
 		}
+	}
+
+	/**
+	 * Submit {@code Json} requests based on post
+	 * 
+	 * @param json
+	 *            the json {@code String}
+	 * @param url
+	 *            the request interface
+	 * @return {@code String}
+	 */
+	public String post(String url, String json) {
+		CloseableHttpClient httpClient = HttpClients.createDefault();
+		HttpPost httpPost = new HttpPost(url);
+		StringEntity entity = new StringEntity(json, ContentType.APPLICATION_JSON);
+		httpPost.setEntity(entity);
+		CloseableHttpResponse response = null;
+		try {
+			response = httpClient.execute(httpPost);
+			return EntityUtils.toString(response.getEntity(), StandardCharsets.UTF_8.name());
+		} catch (IOException e) {
+			e.printStackTrace();
+			return null;
+		} finally {
+			try {
+				if (null != response)
+					response.close();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+
 	}
 
 	/**

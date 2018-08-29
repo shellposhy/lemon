@@ -9,9 +9,7 @@ import cn.com.lemon.base.poi.Excels;
 public class ExcelDataProcess {
 
 	public static void main(String[] args) {
-		 ExcelDataProcess.process();
-		//System.out.println(ContentEncryptUtil.encrypt("ContentEncryptUtil", "shfpback"));
-		//System.out.println(ContentEncryptUtil.encrypt("105025", "shfpback"));
+		ExcelDataProcess.process();
 	}
 
 	public static void process() {
