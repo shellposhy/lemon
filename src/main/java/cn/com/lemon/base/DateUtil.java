@@ -2,12 +2,13 @@ package cn.com.lemon.base;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
 /**
- * 线程安全的日期处理类
+ * Thread safe date handling class
  * 
  * @author shishb
  * @version 1.0
@@ -20,7 +21,7 @@ public final class DateUtil {
 	private static Map<String, ThreadLocal<SimpleDateFormat>> SAFYMAP = new HashMap<String, ThreadLocal<SimpleDateFormat>>();
 
 	/**
-	 * 按照指定日期格式输出日期字符串
+	 * Output the date string in the specified date format
 	 * 
 	 * @param date
 	 * @param pattern
@@ -31,7 +32,7 @@ public final class DateUtil {
 	}
 
 	/**
-	 * 把日期字符串输出为制定格式日期
+	 * Output the date string as a formatted date
 	 * 
 	 * @param dateStr
 	 * @param pattern
@@ -46,7 +47,35 @@ public final class DateUtil {
 		}
 	}
 
-	/* =================私有工具类======================= */
+	/**
+	 * Get the number of days off the two dates
+	 * 
+	 * @param from
+	 * @param to
+	 * @return {@code Integer} days off the two dates
+	 */
+	public static int days(Date from, Date to) {
+		Calendar aCalendar = Calendar.getInstance();
+		aCalendar.setTime(from);
+		int start = aCalendar.get(Calendar.DAY_OF_YEAR);
+		aCalendar.setTime(to);
+		int end = aCalendar.get(Calendar.DAY_OF_YEAR);
+		return end - start;
+	}
+
+	/**
+	 * Get the number of seconds off the two dates
+	 * 
+	 * @param from
+	 * @param to
+	 * @return {@code Long} seconds off the two dates
+	 */
+	public static Long seconds(Date from, Date to) {
+		long result = (to.getTime() - from.getTime()) / 1000L;
+		return Math.abs(result);
+	}
+
+	/* =================tools======================= */
 	private static SimpleDateFormat init(final String format) {
 		ThreadLocal<SimpleDateFormat> local = SAFYMAP.get(format);
 		if (local == null) {

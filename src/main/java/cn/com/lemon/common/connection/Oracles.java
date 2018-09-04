@@ -20,7 +20,7 @@ public final class Oracles {
 
 	public static final String url = "jdbc:oracle:thin:@192.168.5.249:1521:orcl";
 	public static final String name = "oracle.jdbc.OracleDriver";
-	public static final String user = "shfpsubject";
+	public static final String user = "shfp";
 	public static final String password = "Shfpdb12";
 
 	private static ThreadLocal<Connection> connectthreadLocal = new ThreadLocal<Connection>();
