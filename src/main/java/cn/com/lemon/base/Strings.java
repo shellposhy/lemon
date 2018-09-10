@@ -12,6 +12,7 @@ import java.sql.Clob;
 import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * The <code>StringUtil</code>class is basic string utilities.
@@ -364,6 +365,7 @@ public final class Strings {
 	 * @return {@code String}
 	 */
 	public static String MD5(String string) {
+		checkNotNull(string);
 		try {
 			MessageDigest md = MessageDigest.getInstance("MD5");
 			md.update(string.getBytes());
@@ -375,8 +377,16 @@ public final class Strings {
 			return result;
 		} catch (Exception e) {
 			e.printStackTrace();
+			return null;
 		}
-		return null;
 	}
 
+	/**
+	 * Create UUID {@code String}
+	 * 
+	 * @return {@code String}
+	 */
+	public static String uuid() {
+		return UUID.randomUUID().toString().replace("-", "").toLowerCase();
+	}
 }
