@@ -45,7 +45,8 @@ public class DOMAdditionResultBodyTest {
 		body.setSvcCont(svcCont);
 
 		System.out.println(Xmls.generator(body, true, true, MessageBody.class));
-		Xmls.generator(body, "C:\\Users\\Administrator\\Desktop\\body.xml", true, true, MessageBody.class);
+		// Xmls.generator(body, "C:\\Users\\Administrator\\Desktop\\body.xml",
+		// true, true, MessageBody.class);
 
 	}
 
