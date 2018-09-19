@@ -158,7 +158,7 @@ public class DbDao {
 		try {
 			ResultSetMetaData md = rs.getMetaData();
 			if (null != md && md.getColumnCount() > 0) {
-				Field[] fields = helper.filed(t.getClass());
+				Field[] fields = helper.filed(t.getClass(), false);
 				if (null != fields && fields.length > 0) {
 					List<Field> columnList = new ArrayList<Field>();
 					List<Field> idList = new ArrayList<Field>();

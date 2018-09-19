@@ -42,10 +42,12 @@ public class AnnotationHelper {
 	 * Gets all custom annotations for the specified class attribute.
 	 * 
 	 * @param requiredType
+	 * @param parentClass
+	 *            is contain parent class
 	 * @return {@code Field[]}
 	 */
-	public <T> Field[] filed(Class<T> requiredType) {
-		Field[] fields = requiredType.getDeclaredFields();
+	public <T> Field[] filed(Class<T> requiredType, boolean parentClass) {
+		Field[] fields = !parentClass ? requiredType.getDeclaredFields() : requiredType.getFields();
 		if (null != fields && fields.length > 0) {
 			List<Field> list = new ArrayList<Field>();
 			for (Field field : fields) {
@@ -71,8 +73,8 @@ public class AnnotationHelper {
 	 *            The class field name
 	 * @return {@code Field} the annotation
 	 */
-	public <T> Field fieldValue(Class<T> requiredType, String filedName) {
-		Field[] fields = filed(requiredType);
+	public <T> Field fieldValue(Class<T> requiredType, boolean parentClass, String filedName) {
+		Field[] fields = filed(requiredType, parentClass);
 		Field field = null;
 		for (Field f : fields) {
 			if (f.getName().equals(filedName)) {
