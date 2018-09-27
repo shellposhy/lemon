@@ -17,7 +17,9 @@ public class ImportPublishFinish {
 	private static final String PATH = "https://res.zgshfp.com.cn/upload/djpt/zmfpr/";
 
 	public static void main(String[] args) throws SQLException, IOException {
-		ImportPublishFinish.importData();
+		//ImportPublishFinish.importData();
+		System.out.println("10岁尿毒症女儿：爸爸，我什么时候去上学".length());
+		System.out.println("一辈辛苦，老年让病痛折磨，膀胱癌以做手术".substring(0, 10)+"……");
 	}
 
 	public static void importData() throws SQLException, IOException {
