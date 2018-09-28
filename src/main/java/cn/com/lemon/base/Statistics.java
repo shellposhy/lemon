@@ -18,7 +18,7 @@ public final class Statistics {
 	private final static long EIGHT_SECONDS = 28800L;// 8 hours
 	private final static long TWENTY_SECONDS = 72000L;// 20 hours
 
-	private final static long DEFAULT_BASELINE = 20000000L;// baseLine
+	private final static long DEFAULT_BASELINE = 56000000L;// baseLine
 	private final static long DAY_BASELINE = 48000L;// day baseline
 
 	private final static float MAX_RATIO = 0.8f;
