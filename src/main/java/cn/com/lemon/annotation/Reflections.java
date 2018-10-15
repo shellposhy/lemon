@@ -145,6 +145,36 @@ public final class Reflections {
 	}
 
 	/**
+	 * Java {@code Object} class type
+	 * 
+	 * @param object
+	 * @return {@code Class}
+	 */
+	public static Class<?> type(Object object) {
+		Class<?> classType = object.getClass();
+		String typeName = classType.getName();
+		switch (typeName) {
+		case "java.lang.Integer":
+			return Integer.TYPE;
+		case "java.lang.Long":
+			return Long.TYPE;
+		case "java.lang.Float":
+			return Float.TYPE;
+		case "java.lang.Double":
+			return Double.TYPE;
+		case "java.lang.Character":
+			return Character.TYPE;
+		case "java.lang.Boolean":
+			return Boolean.TYPE;
+		case "java.lang.Short":
+			return Short.TYPE;
+		case "java.lang.Byte":
+			return Byte.TYPE;
+		}
+		return classType;
+	}
+
+	/**
 	 * Set the {@code Field} value
 	 * 
 	 * @param object
