@@ -56,7 +56,7 @@ public final class RegularUtil {
 	}
 
 	public static boolean matchPhone(String str) {
-		String regex = "^1[3|4|5|8][0-9]\\d{8}$";
+		String regex = "^1[3|4|5|6|7|8|9][0-9]\\d{8}$";
 		return match(regex, str);
 	}
 

@@ -14,8 +14,7 @@ import cn.com.lemon.common.connection.Oracles;
 
 public class ImportPublishFinish {
 
-	// private static final String PATH =
-	// "https://res.zgshfp.com.cn/upload/djpt/zmfpr/";
+	private static final String PATH = "https://res.zgshfp.com.cn/upload/djpt/migu/";
 
 	public static void main(String[] args) throws SQLException, IOException {
 		ImportPublishFinish.importData();
@@ -29,13 +28,14 @@ public class ImportPublishFinish {
 		String sql = "INSERT INTO shfpsubject.vote_candidate (id,candidate_id,candidate_name,candidate_img,title,url)"
 				+ " VALUES(?,?,?,?,?,?)";
 		PreparedStatement ps = connection.prepareStatement(sql);
-		int tmp = 1;
+		int tmp = 176;
 		for (String[] data : datas) {
 			System.out.println(Jsons.json(data));
 			ps.setInt(1, tmp);
-			ps.setString(2, data[0].length() == 1 ? "00" + data[0] : data[0].length() == 2 ? "0" + data[0] : data[0]);
+			//ps.setString(2, data[0].length() == 1 ? "00" + data[0] : data[0].length() == 2 ? "0" + data[0] : data[0]);
+			ps.setString(2, data[0].length() == 1 ? "0" + data[0] : data[0]);
 			ps.setString(3, data[1].trim());
-			ps.setString(4, data[2].trim());
+			ps.setString(4, PATH+data[2].trim()+".jpg");
 			ps.setString(5, data[3].trim());
 			ps.setString(6, data[4].trim());
 			ps.executeQuery();
