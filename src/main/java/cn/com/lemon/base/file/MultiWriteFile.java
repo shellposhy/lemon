@@ -95,14 +95,6 @@ public final class MultiWriteFile {
 							fcout = null;
 						}
 					}
-					if (fout != null) {
-						try {
-							fout.close();
-						} catch (IOException e) {
-							e.printStackTrace();
-							fout = null;
-						}
-					}
 				}
 			}
 		}
