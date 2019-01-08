@@ -14,7 +14,8 @@ import cn.com.lemon.common.connection.Oracles;
 
 public class ImportDataTime {
 	public static void main(String[] args) throws SQLException, IOException {
-		ImportDataTime.process();
+		//ImportDataTime.process();
+		System.out.println("父亲车祸残疾，母亲挣钱只为我们走出大山".length());
 	}
 
 	public static void process() throws SQLException, IOException {
@@ -25,7 +26,8 @@ public class ImportDataTime {
 		FileWriter insertFileWriter = new FileWriter(insertfile);
 		BufferedWriter insertWriter = new BufferedWriter(insertFileWriter);
 
-		//List<String[]> datas = Excels.read(new File("C:\\Users\\Administrator\\Desktop\\33.xlsx"), true);
+		// List<String[]> datas = Excels.read(new
+		// File("C:\\Users\\Administrator\\Desktop\\33.xlsx"), true);
 
 		CsvReader csvReader = new CsvReader("C:\\Users\\Administrator\\Desktop\\11.csv");
 		csvReader.readHeaders();
@@ -56,14 +58,14 @@ public class ImportDataTime {
 						type = 2;
 					}
 				}
-				
-				//System.out.println(csvReader.get("ID"));
+
+				// System.out.println(csvReader.get("ID"));
 				insertWriter.write(
 						"update my_publish t set t.paymoneytype=" + type + " where id=" + csvReader.get("ID") + ";");
 				insertWriter.newLine();
 			}
 		}
-		
+
 		ps.execute();
 		// for (String[] data : datas) {
 		// // ps.setInt(1, count);// ID
