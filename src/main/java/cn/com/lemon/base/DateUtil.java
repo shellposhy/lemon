@@ -48,6 +48,42 @@ public final class DateUtil {
 	}
 
 	/**
+	 * Gets the month of the specified date
+	 * 
+	 * @param date
+	 * @return int
+	 */
+	public static int month(Date date) {
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(date);
+		return calendar.get(Calendar.MONTH) + 1;
+	}
+
+	/**
+	 * Gets the day of the specified date
+	 * 
+	 * @param date
+	 * @return int
+	 */
+	public static int day(Date date) {
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(date);
+		return calendar.get(Calendar.DATE);
+	}
+
+	/**
+	 * Gets the year of the specified date
+	 * 
+	 * @param date
+	 * @return int
+	 */
+	public static int year(Date date) {
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(date);
+		return calendar.get(Calendar.YEAR);
+	}
+
+	/**
 	 * Get the number of days off the two dates
 	 * 
 	 * @param from
