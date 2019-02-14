@@ -9,5 +9,8 @@ public class Test {
 
 		String test = "/content";
 		System.out.println(test.startsWith("/") ? test.substring(1) : test);
+		
+		String aa="zgshfpWEB201811211124774721";
+		System.out.println(aa.indexOf("WEB") != -1);
 	}
 }

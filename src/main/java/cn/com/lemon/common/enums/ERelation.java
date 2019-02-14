@@ -8,7 +8,7 @@ package cn.com.lemon.common.enums;
  */
 public enum ERelation {
 	Equal("="), UnEqual("<>"), LessThan("<"), MoreThan(">"), LessThanOrEqual("<="), MoreThanOrEqual(">="), Like(
-			"like"), And("and"), Or("or"), Not("not"), NotIn("not in");
+			"like"), And("and"), Or("or"), Not("not"), NotIn("not in"), In("in");
 	private String value;
 
 	private ERelation(String value) {
