@@ -1,16 +1,16 @@
 package cn.com.lemon.test;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
+
 public class Test {
 
 	public static void main(String[] args) {
-		System.out.println("儿子患肿瘤：妻子放弃，我一定要坚持下去！".length());
-
-		System.out.println("522632017000".substring(6, 9));
-
-		String test = "/content";
-		System.out.println(test.startsWith("/") ? test.substring(1) : test);
+		System.out.println(BigDecimal.class.getName());
 		
-		String aa="zgshfpWEB201811211124774721";
-		System.out.println(aa.indexOf("WEB") != -1);
+		BigInteger decimal=new BigInteger("12202223");
+		System.out.println(decimal.getClass().getName());
+		System.out.println(decimal.toString());
+		System.out.println(decimal.longValue());
 	}
 }
