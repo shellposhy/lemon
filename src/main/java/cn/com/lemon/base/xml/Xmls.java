@@ -43,6 +43,7 @@ public final class Xmls {
 	public static XStream newInstance(String name) {
 		XStream stream = XSTREAMS.get(name);
 		checkArgument(stream != null);
+		/* stream.setMode(XStream.NO_REFERENCES); */
 		return stream;
 	}
 
