@@ -5,6 +5,8 @@ import static cn.com.lemon.base.Preasserts.checkNotNull;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.Reader;
+import java.io.StringReader;
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.sql.Blob;
@@ -13,6 +15,9 @@ import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
+
+import javax.swing.text.html.HTMLEditorKit;
+import javax.swing.text.html.parser.ParserDelegator;
 
 /**
  * The <code>StringUtil</code>class is basic string utilities.
@@ -24,6 +29,30 @@ import java.util.UUID;
  */
 public final class Strings {
 	private Strings() {
+	}
+
+	/**
+	 * Return the plain text information
+	 * 
+	 * @param html
+	 *            rich text message
+	 * @return {@link String}
+	 */
+	public static String text(String html) {
+		ParserDelegator pd = new ParserDelegator();
+		Reader r = new StringReader(html);
+		final StringBuilder sb = new StringBuilder();
+		try {
+			pd.parse(r, new HTMLEditorKit.ParserCallback() {
+				public void handleText(char[] data, int pos) {
+					sb.append(data);
+				}
+			}, false);
+			r.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return sb.toString();
 	}
 
 	/**
