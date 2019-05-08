@@ -44,6 +44,7 @@ public class BloomFilters {
 	private BloomFilter<String> bloomFilter;
 	private File file;
 	private Segment segment;
+	private final Double FPP = 0.00001;
 
 	// initialize bloom filter
 	private final BloomFilter<String> filter = BloomFilter.create(new Funnel<String>() {
@@ -53,7 +54,7 @@ public class BloomFilters {
 		public void funnel(String arg0, PrimitiveSink arg1) {
 			arg1.putString(arg0, Charsets.UTF_8);
 		}
-	}, 1024 * 1024 * 32);
+	}, 1024 * 1024 * 32, FPP);
 
 	// Bloom filter based on flunt style
 	/**
@@ -123,8 +124,7 @@ public class BloomFilters {
 			this.segment = segment;
 		} else {
 			// Shortest path splitter
-			this.segment = new DijkstraSegment().enableCustomDictionary(false).enablePlaceRecognize(true)
-					.enableOrganizationRecognize(true);
+			this.segment = new DijkstraSegment().enableCustomDictionary(false).enableAllNamedEntityRecognize(true);
 		}
 		return this;
 	}
@@ -143,7 +143,6 @@ public class BloomFilters {
 		for (String word : words) {
 			List<Term> termList = this.segment.seg(word);
 			for (Term term : termList) {
-				System.out.println("term.word=" + term.word);
 				if (bloomFilter.mightContain(term.word)) {
 					result.add(term.word);
 				}
