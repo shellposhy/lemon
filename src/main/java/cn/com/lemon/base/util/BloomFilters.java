@@ -7,8 +7,9 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,10 +22,19 @@ import com.hankcs.hanlp.seg.Segment;
 import com.hankcs.hanlp.seg.Dijkstra.DijkstraSegment;
 import com.hankcs.hanlp.seg.common.Term;
 
-import static cn.com.lemon.base.Preasserts.checkArgument;
-
 /**
  * Sensitive word filter based on bloem algorithm
+ * <p>
+ * <blockquote>
+ * 
+ * <pre>
+ * File file = new File("sensitivewords.txt");;
+ * String content = "社会有正气，民族才会生生不息，国家才会兴旺发达。";
+ * Set<String> result = BloomFilters.build().file(file).filter().segment(null).sensitive(content);
+ * </pre>
+ * 
+ * </blockquote>
+ * <p>
  * 
  * @author shaobo shih
  * @version 1.0
@@ -51,7 +61,7 @@ public class BloomFilters {
 	 * 
 	 * @return this
 	 */
-	public BloomFilters build() {
+	public static BloomFilters build() {
 		return new BloomFilters();
 	}
 
@@ -61,7 +71,6 @@ public class BloomFilters {
 	 * @return this
 	 */
 	public BloomFilters file(File file) {
-		checkArgument(file != null && !file.isFile());
 		this.file = file;
 		return this;
 	}
@@ -127,13 +136,14 @@ public class BloomFilters {
 	 *            input content
 	 * @return {@link List}
 	 */
-	public List<String> sensitive(String... words) {
+	public Set<String> sensitive(String... words) {
 		if (words == null)
 			return null;
-		List<String> result = new ArrayList<String>();
+		Set<String> result = new TreeSet<String>();
 		for (String word : words) {
 			List<Term> termList = this.segment.seg(word);
 			for (Term term : termList) {
+				System.out.println("term.word=" + term.word);
 				if (bloomFilter.mightContain(term.word)) {
 					result.add(term.word);
 				}
