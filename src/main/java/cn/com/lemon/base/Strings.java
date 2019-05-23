@@ -14,6 +14,7 @@ import java.sql.Clob;
 import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 import javax.swing.text.html.HTMLEditorKit;
@@ -64,6 +65,21 @@ public final class Strings {
 	 * @return {@code String[]}
 	 */
 	public static String[] toArray(List<String> list) {
+		if (null == list || list.size() == 0)
+			return null;
+		String[] target = new String[list.size()];
+		return list.toArray(target);
+	}
+
+	/**
+	 * 
+	 * Returns {@code String[} change List to {@code String[]}
+	 * 
+	 * @param array
+	 *            the {@code String} List
+	 * @return {@code String[]}
+	 */
+	public static String[] toArray(Set<String> list) {
 		if (null == list || list.size() == 0)
 			return null;
 		String[] target = new String[list.size()];
