@@ -184,6 +184,11 @@
 			<artifactId>spring-web</artifactId>
 			<version>${spring4.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-jdbc</artifactId>
+			<version>${spring4.version}</version>
+		</dependency>
 
 		<!-- poi -->
 		<dependency>
