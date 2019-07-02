@@ -43,7 +43,7 @@ public final class Csvs {
 	public static List<String[]> read(String path, boolean containHeaders) {
 		result.clear();
 		try {
-			CsvReader reader = new CsvReader(path);
+			CsvReader reader = new CsvReader(path, COMMA, Charset.forName("UTF-8"));
 			// Read the first record of data as column headers.
 			if (containHeaders)
 				reader.readHeaders();
