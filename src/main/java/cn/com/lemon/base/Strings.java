@@ -8,15 +8,22 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.StringReader;
 import java.io.UnsupportedEncodingException;
+import java.net.Inet4Address;
+import java.net.InetAddress;
+import java.net.NetworkInterface;
+import java.net.SocketException;
+import java.net.UnknownHostException;
 import java.security.MessageDigest;
 import java.sql.Blob;
 import java.sql.Clob;
 import java.sql.SQLException;
 import java.util.Arrays;
+import java.util.Enumeration;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.swing.text.html.HTMLEditorKit;
 import javax.swing.text.html.parser.ParserDelegator;
 
@@ -409,7 +416,7 @@ public final class Strings {
 	 * @param string
 	 * @return {@code String}
 	 */
-	public static String MD5(String string) {
+	public static String md5(String string) {
 		checkNotNull(string);
 		try {
 			MessageDigest md = MessageDigest.getInstance("MD5");
@@ -433,5 +440,66 @@ public final class Strings {
 	 */
 	public static String uuid() {
 		return UUID.randomUUID().toString().replace("-", "").toLowerCase();
+	}
+
+	/**
+	 * Get client ip address
+	 * 
+	 * @param request
+	 * @return
+	 */
+	public static String ip(HttpServletRequest request) {
+		String ipAddress = request.getHeader("x-forwarded-for");
+		if (ipAddress == null || ipAddress.length() == 0 || "unknown".equalsIgnoreCase(ipAddress)) {
+			ipAddress = request.getHeader("Proxy-Client-IP");
+		}
+		if (ipAddress == null || ipAddress.length() == 0 || "unknown".equalsIgnoreCase(ipAddress)) {
+			ipAddress = request.getHeader("WL-Proxy-Client-IP");
+		}
+		if (ipAddress == null || ipAddress.length() == 0 || "unknown".equalsIgnoreCase(ipAddress)) {
+			ipAddress = request.getRemoteAddr();
+			if (ipAddress.equals("127.0.0.1") || ipAddress.equals("0:0:0:0:0:0:0:1")) {
+				InetAddress inet = null;
+				try {
+					inet = InetAddress.getLocalHost();
+					ipAddress = inet.getHostAddress();
+				} catch (UnknownHostException e) {
+					ipAddress = null;
+				}
+			}
+		}
+		String ipSeparate = ",";
+		int ipLength = 15;
+		if (ipAddress != null && ipAddress.length() > ipLength) {
+			if (ipAddress.indexOf(ipSeparate) > 0) {
+				ipAddress = ipAddress.substring(0, ipAddress.indexOf(ipSeparate));
+			}
+		}
+		return ipAddress;
+	}
+
+	/**
+	 * Get the local server IP address
+	 * 
+	 * @return {@code String} {@code Inet4Address} address
+	 */
+	public static String ip() {
+		try {
+			Enumeration<?> en = NetworkInterface.getNetworkInterfaces();
+			while (en.hasMoreElements()) {
+				NetworkInterface i = (NetworkInterface) en.nextElement();
+				for (Enumeration<?> en2 = i.getInetAddresses(); en2.hasMoreElements();) {
+					InetAddress addr = (InetAddress) en2.nextElement();
+					if (!addr.isLoopbackAddress()) {
+						if (addr instanceof Inet4Address) {
+							return addr.getHostAddress();
+						}
+					}
+				}
+			}
+		} catch (SocketException e) {
+			return null;
+		}
+		return null;
 	}
 }
