@@ -18,10 +18,10 @@ public final class Mysqls {
 	private Mysqls() {
 	}
 
-	public static final String url = "jdbc:mysql://localhost:3306/fupin?useUnicode=true&characterEncoding=utf-8";
+	public static final String url = "jdbc:mysql://192.168.2.88:3306/tas?useUnicode=true&amp;characterEncoding=UTF-8";
 	public static final String name = "com.mysql.jdbc.Driver";
-	public static final String user = "root";
-	public static final String password = "";
+	public static final String user = "test";
+	public static final String password = "1234";
 
 	private static ThreadLocal<Connection> connectthreadLocal = new ThreadLocal<Connection>();
 
