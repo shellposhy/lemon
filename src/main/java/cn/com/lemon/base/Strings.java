@@ -13,6 +13,7 @@ import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
 import java.net.UnknownHostException;
+import java.nio.charset.Charset;
 import java.security.MessageDigest;
 import java.sql.Blob;
 import java.sql.Clob;
@@ -27,6 +28,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.swing.text.html.HTMLEditorKit;
 import javax.swing.text.html.parser.ParserDelegator;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * The <code>StringUtil</code>class is basic string utilities.
  * 
@@ -36,6 +40,10 @@ import javax.swing.text.html.parser.ParserDelegator;
  * @version 1.0
  */
 public final class Strings {
+	private static final Logger LOG = LoggerFactory.getLogger(Strings.class.getName());
+	private static final Charset GBK = Charset.forName("GBK");
+	private static final Charset UTF8 = Charset.forName("UTF-8");
+
 	private Strings() {
 	}
 
@@ -140,7 +148,7 @@ public final class Strings {
 	 */
 	public static String blob(Blob blob) {
 		try {
-			BufferedReader reader = new BufferedReader(new InputStreamReader(blob.getBinaryStream(), "utf-8"));
+			BufferedReader reader = new BufferedReader(new InputStreamReader(blob.getBinaryStream(), UTF8.name()));
 			String s = null;
 			StringBuilder sb = new StringBuilder();
 			while ((s = reader.readLine()) != null) {
@@ -174,7 +182,7 @@ public final class Strings {
 	 */
 	public static String clob(Clob clob) {
 		try {
-			BufferedReader reader = new BufferedReader(new InputStreamReader(clob.getAsciiStream(), "utf-8"));
+			BufferedReader reader = new BufferedReader(new InputStreamReader(clob.getAsciiStream(), UTF8.name()));
 			String s = null;
 			StringBuilder sb = new StringBuilder();
 			while ((s = reader.readLine()) != null) {
@@ -257,7 +265,7 @@ public final class Strings {
 		if (isNullOrEmpty(string))
 			return false;
 		try {
-			return string.getBytes("UTF-8").length - string.length() > 0 ? true : false;
+			return string.getBytes(UTF8.name()).length - string.length() > 0 ? true : false;
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 			return false;
@@ -287,7 +295,7 @@ public final class Strings {
 			return 0;
 		try {
 			if (isContainChinese(string)) {
-				int byteInt = string.getBytes("UTF-8").length;
+				int byteInt = string.getBytes(UTF8.name()).length;
 				int stringInt = string.length();
 				return (byteInt - stringInt) / 2;
 			} else {
@@ -310,7 +318,7 @@ public final class Strings {
 	 * @return ({@code String} the sub string
 	 */
 	public static String subString(String string, int length) {
-		return subString(string, length, null, "GBK");
+		return subString(string, length, null, GBK.name());
 	}
 
 	/**
@@ -375,31 +383,28 @@ public final class Strings {
 	 * @return ({@code String} the sub string
 	 */
 	public static String subString(String string, int length, String suffix, String charsetName) {
+		LOG.debug("content[" + string + "],length[" + length + "],suffix[" + suffix + "],charset[" + charsetName + "]");
 		assert string != null;
 		if (isNullOrEmpty(string)) {
 			return null;
 		}
 		suffix = isNullOrEmpty(suffix) ? "" : suffix;
-		int chineseNum = countContainChinese(string);
+		charsetName = isNullOrEmpty(charsetName) ? GBK.name() : charsetName;
 		int size = string.length();
-		if (chineseNum > 0) {
+		if (/* Is contain Chinese characters */countContainChinese(string) > 0) {
 			try {
 				int count = string.getBytes(charsetName).length;
 				if (count <= length) {
 					return string;
 				} else {
-					length = length - suffix.getBytes(charsetName).length;
+					// Remove redundant characters
 					int tmp = length;
-					if (length > 0) {
-						String result = string.substring(0, length);
-						while (result.getBytes(charsetName).length > tmp) {
-							length--;
-							result = string.substring(0, length);
-						}
-						return result + suffix;
-					} else {
-						return suffix;
+					String result = string.substring(0, length > size ? size : length);
+					while (result.getBytes(charsetName).length > tmp) {
+						length--;
+						result = string.substring(0, length > size ? size : length);
 					}
+					return result + suffix;
 				}
 			} catch (UnsupportedEncodingException e) {
 				e.printStackTrace();
