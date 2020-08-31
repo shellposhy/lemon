@@ -54,8 +54,8 @@ public class BloomFilters {
 		private static final long serialVersionUID = 1L;
 
 		@Override
-		public void funnel(String arg0, PrimitiveSink arg1) {
-			arg1.putString(arg0, Charsets.UTF_8);
+		public void funnel(String from, PrimitiveSink into) {
+			into.putString(from, Charsets.UTF_8);
 		}
 	}, 1024 * 1024 * 32, FPP);
 
