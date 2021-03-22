@@ -13,7 +13,7 @@
 		<spring.version>3.2.3.RELEASE</spring.version>
 		<spring4.version>4.1.8.RELEASE</spring4.version>
 		<jackson.version>2.9.4</jackson.version>
-		<xstream_version>1.4.9</xstream_version>
+		<xstream_version>1.4.16</xstream_version>
 		<httpclient_version>4.5.6</httpclient_version>
 		<metadata_version>2.12.0</metadata_version>
 		<zip_version>1.3.2</zip_version>
